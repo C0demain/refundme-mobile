@@ -3,6 +3,7 @@ import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from "@/components/ui/button";
+import { Link, LinkText } from "@/components/ui/link"
 
 
 
@@ -46,6 +47,14 @@ export default function Login() {
       <Button className="items-center justify-center  w-80 bg-[#8a2be2] rounded-lg p-3" onPress={handleLogin}>
         <ButtonText className="text-white text-sm font-bold">LOGIN</ButtonText>
       </Button>
+
+      <Link href="/refoundnew">
+        <LinkText>Cadastrar Reembolso</LinkText>
+      </Link>
+      
     </Box>
+    
+
+
   );
 }
