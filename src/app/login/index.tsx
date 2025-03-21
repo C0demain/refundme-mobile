@@ -3,13 +3,13 @@ import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from "@/components/ui/button";
-import { Link, LinkText } from "@/components/ui/link"
-
-
+import { TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter();
 
   const handleLogin = () => {
     console.log("Email:", email);
@@ -20,7 +20,6 @@ export default function Login() {
     <Box className="flex-1 items-center justify-center p-4">
       <Text className="text-3xl font-bold text-[#8a2be2] mb-10">Login de Usuário</Text>
 
-      
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
         <InputField
           placeholder="Email"
@@ -32,7 +31,6 @@ export default function Login() {
         />
       </Input>
 
-    
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
         <InputField
           placeholder="Senha"
@@ -48,9 +46,9 @@ export default function Login() {
         <ButtonText className="text-white text-sm font-bold">LOGIN</ButtonText>
       </Button>
 
-      <Link href="/refoundnew">
-        <LinkText>Cadastrar Reembolso</LinkText>
-      </Link>
+      <TouchableOpacity onPress={() => router.push('/refund')}>
+        <Text>Cadastrar Reembolso</Text>
+      </TouchableOpacity>
       
     </Box>
     

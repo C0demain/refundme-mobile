@@ -32,8 +32,9 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode="light"><ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="login/index" />
-          <Stack.Screen name="+not-found" />
+          <Stack.Screen name="login/index" options={{ title: "Login" }}/>
+          <Stack.Screen name="+not-found" options={{ title: "Página não encontrada" }}/>
+          <Stack.Screen name="refund/index" options={{ title: "Cadastro de Reembolso" }}  />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider></GluestackUIProvider>
