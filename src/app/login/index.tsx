@@ -2,24 +2,33 @@ import { useState } from "react";
 import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
 import { Input, InputField } from '@/components/ui/input';
-import { Button, ButtonText } from "@/components/ui/button";
+import { login } from "@/src/api/loginService/login"
 import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { Button, ButtonText } from "@/components/ui/button";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Senha:", senha);
-  }; 
+  const handleLogin = async () => {
+    try {
+      const response = await login({ email, password: senha });
+      console.log("Login bem-sucedido:", response );
+     
+    } catch (err) {
+      setError("Erro ao fazer login. Verifique suas credenciais.");
+      console.error("Erro ao fazer login:", err);
+    }
+  };
 
   return (
     <Box className="flex-1 items-center justify-center p-4">
       <Text className="text-3xl font-bold text-[#8a2be2] mb-10">Login de Usuário</Text>
-
+      {error && <Text className="text-red-500 mb-4">{error}</Text>}
+      
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
         <InputField
           placeholder="Email"
@@ -41,18 +50,14 @@ export default function Login() {
         />
       </Input>
 
-      
-      <Button className="items-center justify-center  w-80 bg-[#8a2be2] rounded-lg p-3" onPress={handleLogin}>
+      <Button className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3"onPress={() => { 
+          handleLogin(); 
+          router.push('/refund'); 
+        }}>
         <ButtonText className="text-white text-sm font-bold">LOGIN</ButtonText>
       </Button>
 
-      <TouchableOpacity onPress={() => router.push('/refund')}>
-        <Text>Cadastrar Reembolso</Text>
-      </TouchableOpacity>
       
     </Box>
-    
-
-
   );
 }
