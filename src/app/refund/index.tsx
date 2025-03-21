@@ -6,6 +6,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import CurrencyInput from "react-native-currency-input";
 import * as DocumentPicker from "expo-document-picker";
 import { Picker } from "@react-native-picker/picker";
+import { ActivityIndicator } from "react-native";
 
 export default function Refund() {
   const [type, setType] = useState("");
@@ -14,6 +15,7 @@ export default function Refund() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleDateChange = (text: string) => {
     let formattedDate = text.replace(/\D/g, "");
@@ -47,12 +49,16 @@ export default function Refund() {
       return;
     }
     setError("");
+    setLoading(true);
 
-    console.log("Tipo:", type);
-    console.log("Valor:", value);
-    console.log("Data:", date);
-    console.log("Descrição:", description);
-    console.log("Arquivo Selecionado:", fileName);
+    setTimeout(() => {
+      setLoading(false);
+      console.log("Tipo:", type);
+      console.log("Valor:", value);
+      console.log("Data:", date);
+      console.log("Descrição:", description);
+      console.log("Arquivo Selecionado:", fileName);
+    }, 1500);
   };
 
   const pickDocument = async () => {
@@ -71,21 +77,27 @@ export default function Refund() {
   };
 
   return (
-    <Box className="flex-1 items-center justify-center p-4">
-      <Text className="text-3xl font-bold text-[#8a2be2] mb-10">Cadastro de Reembolso</Text>
+    <Box className="flex-1 items-center justify-center p-4 bg-white">
+      <Text className="text-3xl font-bold text-[#8a2be2] mb-6">Cadastro de Reembolso</Text>
       {error ? <Text className="text-red-500 mb-4">{error}</Text> : null}
 
-      <Box className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
-        <Picker selectedValue={type} onValueChange={(itemValue) => setType(itemValue)} className="w-full p-3 text-gray-800">
+      {/* Tipo de Reembolso */}
+      <Box className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
+        <Picker
+          selectedValue={type}
+          onValueChange={(itemValue) => setType(itemValue)}
+          className="w-full p-3 text-gray-800"
+        >
           <Picker.Item label="Selecione um tipo" value="" />
           <Picker.Item label="Alimentação" value="Alimentação" />
           <Picker.Item label="Transporte" value="Transporte" />
           <Picker.Item label="Papelaria" value="Papelaria" />
-          <Picker.Item label="Hospedaria" value="Hospedaria" />
+          <Picker.Item label="Hospedagem" value="Hospedagem" />
         </Picker>
       </Box>
 
-      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
+      {/* Valor */}
+      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <CurrencyInput
           value={value}
           onChangeValue={setValue}
@@ -97,39 +109,56 @@ export default function Refund() {
           maxLength={12}
           keyboardType="numeric"
           placeholder="Valor"
-          className="w-full p-3 text-gray-800 placeholder:text-gray-800"
+          className="w-full p-2 text-gray-800 placeholder:text-gray-500"
         />
       </Input>
 
-      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
+      {/* Data */}
+      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <InputField
           placeholder="DD/MM/AAAA"
           keyboardType="numeric"
           value={date}
           onChangeText={handleDateChange}
           maxLength={10}
-          className="w-full p-3 text-gray-800"
+          className="w-full p-2 text-gray-800 placeholder:text-gray-500"
         />
       </Input>
 
-      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg h-32">
+      {/* Descrição */}
+      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg h-32 bg-gray-100">
         <InputField
           placeholder="Descrição (Opcional)"
           autoCapitalize="none"
           value={description}
           onChangeText={setDescription}
           multiline
-          className="w-full p-3 text-gray-800"
+          keyboardType="default"
+          className="w-full p-3 text-gray-800 placeholder:text-gray-500"
         />
       </Input>
 
-      <Button className="items-center justify-center w-80 mb-2 bg-[#8a2be2] rounded-lg p-3" onPress={pickDocument}>
-        <ButtonText className="text-white text-sm font-bold">Selecionar Arquivo</ButtonText>
+      {/* Seleção de Arquivo */}
+      <Button className="items-center justify-center w-80 mb-2 bg-[#8a2be2] rounded-lg p-3 flex-row" onPress={pickDocument}>
+        <ButtonText className="text-white text-sm font-bold">
+          {fileName ? "Alterar Arquivo" : "Selecionar Arquivo"}
+        </ButtonText>
       </Button>
-      {fileName && <Text className="mb-4 text-gray-800">Arquivo: {fileName}</Text>}
+      {fileName && (
+        <Text className="mb-4 text-gray-800 italic">📂 {fileName}</Text>
+      )}
 
-      <Button className="items-center justify-center w-80 mb-4 bg-[#8a2be2] rounded-lg p-3" onPress={handleRefund}>
-        <ButtonText className="text-white text-sm font-bold">CADASTRAR</ButtonText>
+      {/* Botão de Cadastrar */}
+      <Button
+        className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3 flex-row"
+        onPress={handleRefund}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <ButtonText className="text-white text-sm font-bold">CADASTRAR</ButtonText>
+        )}
       </Button>
     </Box>
   );
