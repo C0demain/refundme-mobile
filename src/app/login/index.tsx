@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Text } from '@/components/ui/text';
-import { Box } from '@/components/ui/box';
-import { Input, InputField } from '@/components/ui/input';
-import { login } from "@/src/api/loginService/login"
-import { TouchableOpacity } from "react-native";
+import { Text } from "@/components/ui/text";
+import { Box } from "@/components/ui/box";
+import { Input, InputField } from "@/components/ui/input";
+import { login } from "@/src/api/loginService/login";
 import { useRouter } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,8 +16,14 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const response = await login({ email, password: senha });
-      console.log("Login bem-sucedido:", response );
-     
+      console.log("Login bem-sucedido:", response);
+
+      
+      await AsyncStorage.setItem("authToken", response.access_token);
+      console.log("Token armazenado com sucesso!");
+
+      router.push("/refund");
+      
     } catch (err) {
       setError("Erro ao fazer login. Verifique suas credenciais.");
       console.error("Erro ao fazer login:", err);
@@ -28,7 +34,7 @@ export default function Login() {
     <Box className="flex-1 items-center justify-center p-4">
       <Text className="text-3xl font-bold text-[#8a2be2] mb-10">Login de Usuário</Text>
       {error && <Text className="text-red-500 mb-4">{error}</Text>}
-      
+
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg">
         <InputField
           placeholder="Email"
@@ -50,14 +56,12 @@ export default function Login() {
         />
       </Input>
 
-      <Button className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3"onPress={() => { 
-          handleLogin(); 
-          router.push('/refund'); 
-        }}>
+      <Button
+        className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3"
+        onPress={handleLogin}
+      >
         <ButtonText className="text-white text-sm font-bold">LOGIN</ButtonText>
       </Button>
-
-      
     </Box>
   );
 }

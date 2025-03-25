@@ -15,6 +15,11 @@ export const login = async ({ email, password }: LoginRequest) => {
         withCredentials: true, 
       }
     );
+
+    if (!response.data || !response.data.access_token) {
+      throw new Error("Token não recebido na resposta do servidor.");
+    }
+
     return response.data;
   } catch (error) {
     console.error("Erro ao fazer login:", error);
