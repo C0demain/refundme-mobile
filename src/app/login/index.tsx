@@ -20,10 +20,11 @@ export default function Login() {
 
       
       await AsyncStorage.setItem("authToken", response.access_token);
-      console.log("Token armazenado com sucesso!");
+      await AsyncStorage.setItem("userId", response.user_id);
+      console.log("Token e ID armazenados com sucesso!");
 
+     
       router.push("/refund");
-      
     } catch (err) {
       setError("Erro ao fazer login. Verifique suas credenciais.");
       console.error("Erro ao fazer login:", err);

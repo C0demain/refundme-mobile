@@ -8,16 +8,16 @@ interface LoginRequest {
 export const login = async ({ email, password }: LoginRequest) => {
   try {
     const response = await axios.post(
-      "http://ubuntu@ec2-3-137-212-127.us-east-2.compute.amazonaws.com:3000/auth/login",
+      "http://api-5semestre.ddns.net:3000/auth/login",
       { email, password },
       {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true, 
+        withCredentials: true,
       }
     );
 
-    if (!response.data || !response.data.access_token) {
-      throw new Error("Token não recebido na resposta do servidor.");
+    if (!response.data || !response.data.access_token || !response.data.user_id) {
+      throw new Error("Token ou ID não recebido na resposta do servidor.");
     }
 
     return response.data;
