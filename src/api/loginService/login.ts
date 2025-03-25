@@ -8,7 +8,7 @@ interface LoginRequest {
 export const login = async ({ email, password }: LoginRequest) => {
   try {
     const response = await axios.post(
-      "http://10.0.2.2:3000/auth/login",
+      "http://ubuntu@ec2-3-137-212-127.us-east-2.compute.amazonaws.com:3000/auth/login",
       { email, password },
       {
         headers: { "Content-Type": "application/json" },
