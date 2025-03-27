@@ -4,7 +4,6 @@ import CardExpense from "@/src/components/expense/cardExpense";
 import View from "@expo/html-elements/build/primitives/View";
 import { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from '@react-navigation/native';  // Importa o useNavigation
 import { useRouter } from "expo-router";
 import { Heading } from "@/components/ui/heading";
 
@@ -34,16 +33,18 @@ export default function Expenses() {
             ) : (
                 <FlatList
                     data={expenses}
-                    keyExtractor={(item, index) => index.toString()}     // Evita erro de key
-                    numColumns={2} // Define duas colunas
+                    keyExtractor={(item, index) => index.toString()}   
+                    numColumns={2} 
                     renderItem={({ item }) => (
-                        <View style={{ flex: 1, padding: 5 }}>
+                        <View style={{ width: '50%', padding: 5 }}>
                             <CardExpense 
+                                id={item._id}
                                 value={item.value}
                                 type={item.type}
                                 date={item.date}
                                 description={item.description}
                                 image={item.image}
+                                onDelete={getExpenses}
                             />
                         </View>
                     )}
@@ -56,12 +57,9 @@ export default function Expenses() {
                     bottom: 20,
                     right: 20,
                     backgroundColor: '#6200EE',
-                    padding: 15,
+                    padding: 10,
+                    paddingHorizontal: 17,
                     borderRadius: 30,
-                    shadowColor: '#000', 
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 5,
                 }}
                 onPress={() => router.push('/refund')} 
             >

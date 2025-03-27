@@ -8,6 +8,7 @@ export interface Expense {
   date: string;
   description: string;
   image: string;
+  _id:string
 }
 
 export const getExpensesByUser = async (): Promise<Expense[]> => {
