@@ -24,7 +24,7 @@ export default function Login() {
       console.log("Token e ID armazenados com sucesso!");
 
      
-      router.push("/refund");
+      router.push("/expenses");
     } catch (err) {
       setError("Erro ao fazer login. Verifique suas credenciais.");
       console.error("Erro ao fazer login:", err);
