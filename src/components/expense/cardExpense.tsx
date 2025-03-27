@@ -29,7 +29,7 @@ const CardExpense: React.FC<CardExpenseProps> = ({ value, type, date, descriptio
 
     return (
         <>
-        <Button onPress={() => setShowAlertDialog(true)} className="w-1/2 h-min m-2 shadow-black rounded-md bg-white">
+        <Button onPress={() => setShowAlertDialog(true)} className="w-1/2 h-min m-1 shadow-lg rounded-md bg-white">
             <Box>
                 <Text>Valor: R${value}</Text>
                 <Text>Tipo: {type}</Text>

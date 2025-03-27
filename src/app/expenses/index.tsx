@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';  // Importa o useNavigation
 import { useRouter } from "expo-router";
+import { Heading } from "@/components/ui/heading";
 
 export default function Expenses() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -27,6 +28,7 @@ export default function Expenses() {
 
     return (
         <Box style={{ flex: 1 }}>
+            <Heading size="2xl" className="px-3 py-3">Lista de reembolsos</Heading>
             {expenses.length === 0 ? (
                 <Text>Cadastre um novo reembolso</Text>
             ) : (
