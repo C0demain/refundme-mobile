@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_BASE_URL = "http://api-5semestre.ddns.net:3000/expenses";
 
-// Interface para criação de reembolso
+
 export interface CreateExpenseRequest {
   value: number;
   userId: string;
@@ -17,23 +17,20 @@ export interface CreateExpenseRequest {
   };
 }
 
-// Função para obter o userId
 export const getUserId = async () => {
   try {
-    // Recupera o userId do AsyncStorage (ou de onde quer que esteja armazenado)
     const userId = await AsyncStorage.getItem("userId");
-    return userId;  // Retorna o userId encontrado
+    return userId; 
   } catch (error) {
     console.error("Erro ao buscar o userId:", error);
-    throw error;  // Caso haja erro ao recuperar o userId
+    throw error;
   }
 };
 
-// Função para criar um reembolso
 export const createExpense = async (data: CreateExpenseRequest) => {
   try {
     const token = await AsyncStorage.getItem("token");
-    const userId = await getUserId();  // Chama a função getUserId para obter o userId
+    const userId = await getUserId();  
 
     if (!userId) {
       throw new Error("userId não encontrado");
@@ -44,17 +41,16 @@ export const createExpense = async (data: CreateExpenseRequest) => {
       "Content-Type": "application/json",
     };
 
-    // Ajuste para envio correto da imagem (caso exista)
     const payload = {
       ...data,
-      userId,  // Envia o userId obtido
-      image: data.image ? data.image.uri : undefined, // Envia apenas a URI da imagem, se existir
+      userId,  
+      image: data.image ? data.image.uri : undefined, 
     };
 
     const response = await axios.post(API_BASE_URL, payload, { headers });
-    return response.data;  // Retorna a resposta da API
+    return response.data; 
   } catch (error) {
     console.error("Erro ao criar reembolso:", error);
-    throw error;  // Lança o erro caso algo aconteça
+    throw error;  
   }
 };
