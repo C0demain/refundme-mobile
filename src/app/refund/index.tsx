@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Input, InputField } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import CurrencyInput from "react-native-currency-input";
 import * as DocumentPicker from "expo-document-picker";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native";
+import { createExpense } from "../../api/refundService/refund";
+import { getUserId } from "../../api/refundService/refund"; 
 
 export default function Refund() {
   const [type, setType] = useState("");
@@ -16,6 +18,20 @@ export default function Refund() {
   const [error, setError] = useState("");
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);  
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await getUserId();
+        setUserId(storedUserId);  
+      } catch (error) {
+        console.error("Erro ao buscar o userId:", error);
+      }
+    };
+
+    fetchUserId();
+  }, []); 
 
   const handleDateChange = (text: string) => {
     let formattedDate = text.replace(/\D/g, "");
@@ -43,9 +59,9 @@ export default function Refund() {
     setDate(formattedDate);
   };
 
-  const handleRefund = () => {
-    if (!type || value === null || !date) {
-      setError("Os campos Tipo, Valor e Data são obrigatórios.");
+  const handleRefund = async () => {
+    if (!type || value === null || !date || !userId) {
+      setError("Os campos Tipo, Valor, Data e UserId são obrigatórios.");
       return;
     }
     setError("");
@@ -58,7 +74,32 @@ export default function Refund() {
       console.log("Data:", date);
       console.log("Descrição:", description);
       console.log("Arquivo Selecionado:", fileName);
+      console.log("UserID:", userId);
     }, 1500);
+
+
+    const image = fileName
+      ? { uri: "file://" + fileName, name: fileName, type: "application/octet-stream" }
+      : undefined;
+
+    const expenseData = {
+      value,
+      userId,
+      type,
+      date,
+      description,
+      image,
+    };
+
+    try {
+      const response = await createExpense(expenseData); 
+      console.log("Reembolso cadastrado:", response);
+    } catch (error) {
+      console.error("Erro ao cadastrar reembolso:", error);
+      setError("Erro ao cadastrar reembolso. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const pickDocument = async () => {
@@ -81,7 +122,6 @@ export default function Refund() {
       <Text className="text-3xl font-bold text-[#8a2be2] mb-6">Cadastro de Reembolso</Text>
       {error ? <Text className="text-red-500 mb-4">{error}</Text> : null}
 
-      {/* Tipo de Reembolso */}
       <Box className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <Picker
           selectedValue={type}
@@ -96,7 +136,6 @@ export default function Refund() {
         </Picker>
       </Box>
 
-      {/* Valor */}
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <CurrencyInput
           value={value}
@@ -113,7 +152,6 @@ export default function Refund() {
         />
       </Input>
 
-      {/* Data */}
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <InputField
           placeholder="DD/MM/AAAA"
@@ -125,7 +163,6 @@ export default function Refund() {
         />
       </Input>
 
-      {/* Descrição */}
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg h-32 bg-gray-100">
         <InputField
           placeholder="Descrição (Opcional)"
@@ -138,17 +175,15 @@ export default function Refund() {
         />
       </Input>
 
-      {/* Seleção de Arquivo */}
       <Button className="items-center justify-center w-80 mb-2 bg-[#8a2be2] rounded-lg p-3 flex-row" onPress={pickDocument}>
         <ButtonText className="text-white text-sm font-bold">
           {fileName ? "Alterar Arquivo" : "Selecionar Arquivo"}
-        </ButtonText>
+        </ButtonText> 
       </Button>
       {fileName && (
         <Text className="mb-4 text-gray-800 italic">📂 {fileName}</Text>
       )}
-
-      {/* Botão de Cadastrar */}
+ 
       <Button
         className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3 flex-row"
         onPress={handleRefund}
