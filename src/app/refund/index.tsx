@@ -8,7 +8,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native";
 import { createExpense } from "../../api/refundService/refund";
-import { getUserId } from "../../api/refundService/refund"; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Refund() {
   const [type, setType] = useState("");
@@ -19,45 +19,52 @@ export default function Refund() {
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);  
+  const [file, setFile] = useState<{ uri: string; name: string; type: string } | null>(null);
+
+  const fetchUserId = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem("userId");
+      setUserId(storedUserId);  
+    } catch (error) {
+      console.error("Erro ao buscar o userId:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const storedUserId = await getUserId();
-        setUserId(storedUserId);  
-      } catch (error) {
-        console.error("Erro ao buscar o userId:", error);
-      }
-    };
-
     fetchUserId();
   }, []); 
 
   const handleDateChange = (text: string) => {
     let formattedDate = text.replace(/\D/g, "");
-    
+  
     if (formattedDate.length > 2) {
       formattedDate = formattedDate.slice(0, 2) + "/" + formattedDate.slice(2);
     }
     if (formattedDate.length > 5) {
       formattedDate = formattedDate.slice(0, 5) + "/" + formattedDate.slice(5, 9);
     }
-    
+  
     if (formattedDate.length === 10) {
       const [day, month, year] = formattedDate.split("/").map(Number);
       const isValidDate =
         day > 0 && day <= 31 &&
         month > 0 && month <= 12 &&
         year >= 1900 && year <= new Date().getFullYear();
-
+  
       if (!isValidDate) {
         setError("Data inválida. Use o formato DD/MM/AAAA.");
       } else {
         setError("");
+  
+        // Converte para formato ISO 8601: "YYYY-MM-DD"
+        const isoDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+        setDate(isoDate);
       }
+    } else {
+      setDate(formattedDate);
     }
-    setDate(formattedDate);
   };
+  
 
   const handleRefund = async () => {
     if (!type || value === null || !date || !userId) {
@@ -69,18 +76,12 @@ export default function Refund() {
 
     setTimeout(() => {
       setLoading(false);
-      console.log("Tipo:", type);
-      console.log("Valor:", value);
-      console.log("Data:", date);
-      console.log("Descrição:", description);
-      console.log("Arquivo Selecionado:", fileName);
-      console.log("UserID:", userId);
     }, 1500);
 
-
+    // Certificando-se de que o arquivo e nome da imagem sejam válidos
     const image = fileName
-      ? { uri: "file://" + fileName, name: fileName, type: "application/octet-stream" }
-      : undefined;
+    ? { uri: file?.uri, name: fileName.split("/").pop(), type: file?.type || "application/octet-stream" }
+    : undefined;
 
     const expenseData = {
       value,
@@ -106,17 +107,22 @@ export default function Refund() {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "*/*",
-        copyToCacheDirectory: false,
       });
-
+  
       if (!result.canceled) {
-        setFileName(result.assets[0].name);
+        const file = result.assets[0];
+        setFileName(file.name);
+        setFile({
+          uri: file.uri, // Garante que o caminho é completo
+          name: file.name,
+          type: file.mimeType || "application/octet-stream", // Defina um tipo padrão
+        });
       }
     } catch (error) {
       console.error("Erro ao selecionar arquivo:", error);
     }
   };
-
+  
   return (
     <Box className="flex-1 items-center justify-center p-4 bg-white">
       <Text className="text-3xl font-bold text-[#8a2be2] mb-6">Cadastro de Reembolso</Text>
@@ -148,7 +154,7 @@ export default function Refund() {
           maxLength={12}
           keyboardType="numeric"
           placeholder="Valor"
-          className="w-full p-2 text-gray-800 placeholder:text-gray-500"
+          className="w-full p-2 text-gray-800"
         />
       </Input>
 
@@ -159,7 +165,7 @@ export default function Refund() {
           value={date}
           onChangeText={handleDateChange}
           maxLength={10}
-          className="w-full p-2 text-gray-800 placeholder:text-gray-500"
+          className="w-full p-2 placeholder:text-gray-500"
         />
       </Input>
 
@@ -171,7 +177,7 @@ export default function Refund() {
           onChangeText={setDescription}
           multiline
           keyboardType="default"
-          className="w-full p-3 text-gray-800 placeholder:text-gray-500"
+          className="w-full p-3 placeholder:text-gray-500"
         />
       </Input>
 
