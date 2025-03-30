@@ -1,8 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as FileSystem from "expo-file-system";
 
 const API_BASE_URL = "http://api-5semestre.ddns.net:3000/expenses";
+
+const convertDateToISO = (dateStr: string): string => {
+  const [day, month, year] = dateStr.split("/");
+  const dateObj = new Date(`${year}-${month}-${day}T00:00:00`);
+  return dateObj.toISOString();
+};
 
 export interface CreateExpenseRequest {
   value: number;
@@ -30,7 +35,7 @@ export const createExpense = async (data: CreateExpenseRequest) => {
     formData.append("value", String(data.value));
     formData.append("userId", data.userId);
     formData.append("type", data.type);
-    formData.append("date", data.date);
+    formData.append("date", convertDateToISO(data.date));
     if (data.description) formData.append("description", data.description);
 
     console.log(data.image);
