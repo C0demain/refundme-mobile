@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
+import Toast from 'react-native-toast-message'; 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -37,6 +37,7 @@ export default function RootLayout() {
           <Stack.Screen name="refund/index" options={{ title: "Cadastro de Reembolso" }}  />
           <Stack.Screen name="expenses/index" options={{ title: "Lista de reembolsos" }}  />
         </Stack>
+        <Toast />
         <StatusBar style="auto" />
       </ThemeProvider></GluestackUIProvider>
   );

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 interface LoginRequest {
   email: string;
@@ -22,7 +23,11 @@ export const login = async ({ email, password }: LoginRequest) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erro ao fazer login:", error);
-    throw error;
+    Toast.show({
+      type: 'error',
+      text1: 'Erro ao fazer login!',
+      text2: 'Verifique as credenciais utilizadas.',
+      position: 'top',
+    });
   }
 };

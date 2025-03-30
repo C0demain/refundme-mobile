@@ -2,13 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export interface Expense {
-  value: number;
-  userId: string;
-  type: string;
-  date: string;
-  description: string;
-  image: string;
-  _id:string
+    value: number;
+    userId: string;
+    type: string;
+    date: string;
+    description: string;
+    image: string;
+    _id: string
 }
 
 export const getExpensesByUser = async (): Promise<Expense[]> => {
