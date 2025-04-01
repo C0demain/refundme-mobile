@@ -30,10 +30,10 @@ export default function Expenses() {
 
     return (
         <Box style={{ flex: 1 }}>
-            <Heading size="2xl" className="px-3 py-3">Lista de reembolsos</Heading>
+            <Heading size="2xl" className="px-3 py-3 my-3">Lista de reembolsos</Heading>
 
             {loading ? (
-                <Box className="flex-1 justify-center items-center">
+                <Box className="flex-1 justify-center items-center w-1/2">
                     <ActivityIndicator size="large" color="#6200EE" />
                 </Box>
             ) : expenses.length === 0 ? (
@@ -41,10 +41,11 @@ export default function Expenses() {
             ) : (
                 <FlatList
                     data={expenses}
-                    keyExtractor={(item, index) => index.toString()}   
-                    numColumns={2} 
+                    contentContainerClassName="gap-2 mx-2"
+                    keyExtractor={(item) => item._id.toString()}
+                    numColumns={1}
                     renderItem={({ item }) => (
-                        <View style={{ width: '50%', padding: 5 }}>
+                        <View className="w-full">
                             <CardExpense 
                                 id={item._id}
                                 value={item.value}

@@ -35,7 +35,7 @@ export default function RootLayout() {
           <Stack.Screen name="login/index" options={{ title: "Login" }}/>
           <Stack.Screen name="+not-found" options={{ title: "Página não encontrada" }}/>
           <Stack.Screen name="refund/index" options={{ title: "Cadastro de Reembolso" }}  />
-          <Stack.Screen name="expenses/index" options={{ title: "Lista de reembolsos" }}  />
+          <Stack.Screen name="expenses/index" options={{ title: "Reembolsos" }}  />
         </Stack>
         <Toast />
         <StatusBar style="auto" />
