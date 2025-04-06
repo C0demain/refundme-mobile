@@ -126,7 +126,7 @@ export default function Refund() {
         position: 'top',
       });
   
-      router.push("/expenses");
+      router.push("/(tabs)/expenses");
   
     } catch (error) {
       console.error("Erro ao cadastrar reembolso:", error);

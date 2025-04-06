@@ -34,7 +34,7 @@ export default function Login() {
         position: "top",
       });
 
-      router.push("/expenses");
+      router.push("/(tabs)/expenses");
     } catch (err) {
       Toast.show({
         type: "error",
