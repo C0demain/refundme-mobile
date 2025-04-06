@@ -7,10 +7,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import Toast from 'react-native-toast-message'; 
+import Toast from 'react-native-toast-message';
 import { useColorScheme } from '@/src/hooks/useColorScheme';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -30,15 +29,16 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode="light"><ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="login/index" options={{ title: "Login" }}/>
-          <Stack.Screen name="+not-found" options={{ title: "Página não encontrada" }}/>
-          <Stack.Screen name="refund/index" options={{ title: "Cadastro de Reembolso" }}  />
-          <Stack.Screen name="expenses/index" options={{ title: "Lista de reembolsos" }}  />
+    <GluestackUIProvider mode="light">
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="+not-found" />
         </Stack>
         <Toast />
         <StatusBar style="auto" />
-      </ThemeProvider></GluestackUIProvider>
+      </ThemeProvider>
+    </GluestackUIProvider>
   );
 }
