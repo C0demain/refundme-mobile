@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "@/src/lib/api";
 import Toast from "react-native-toast-message";
 
 interface LoginRequest {
@@ -8,14 +8,7 @@ interface LoginRequest {
 
 export const login = async ({ email, password }: LoginRequest) => {
   try {
-    const response = await axios.post(
-      "http://api-5semestre.ddns.net:3000/auth/login",
-      { email, password },
-      {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }
-    );
+    const response = await api.post("/auth/login",{ email, password });
 
     if (!response.data || !response.data.access_token || !response.data.user_id) {
       throw new Error("Token ou ID não recebido na resposta do servidor.");

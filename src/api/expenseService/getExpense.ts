@@ -1,5 +1,5 @@
+import api from "@/src/lib/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 
 export interface Expense {
     value: number;
@@ -12,18 +12,11 @@ export interface Expense {
 }
 
 export const getExpensesByUser = async (): Promise<Expense[]> => {
-    const authToken = await AsyncStorage.getItem('authToken');
     const userId = await AsyncStorage.getItem('userId');
 
-    if (userId && authToken) {
+    if (userId) {
         try {
-            const response = await axios.get(`http://api-5semestre.ddns.net:3000/users/${userId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authToken}`
-                },
-                withCredentials: true,
-            });
+            const response = await api.get(`/users/${userId}`)
 
             return response.data.expenses ?? [];
         } catch (error) {

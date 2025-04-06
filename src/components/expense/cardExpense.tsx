@@ -12,8 +12,9 @@ import {
   AlertDialogBackdrop,
 } from "@/components/ui/alert-dialog";
 import { Heading } from "@/components/ui/heading";
-import { formatDate } from "@/src/utils/dateFormatter";
+import { formatDate } from "@/src/utils/formatters/dateFormatter";
 import DeleteExpense from "./deleteExpense";
+import { formatCurrency } from "@/src/utils/formatters/currencyFormatter";
 
 interface CardExpenseProps {
   value: number;
@@ -38,11 +39,11 @@ const CardExpense: React.FC<CardExpenseProps> = ({ value, type, date, descriptio
 
   return (
     <>
-      <Button onPress={() => setShowAlertDialog(true)} className="h-min shadow-lg rounded-md bg-white">
-        <Box>
-          <Text>Valor: R${value}</Text>
-          <Text>Tipo: {type}</Text>
-          <Text>Data: {formatDate(date)}</Text>
+      <Button onPress={() => setShowAlertDialog(true)} className="flex flex-col h-min shadow-lg mx-0 bg-white items-start p-4 w-full data-[active=true]:bg-gray-200">
+        <Text>{formatDate(date)}</Text>
+        <Box className="flex flex-row justify-between w-full">
+          <Text className="text-xl">{type}</Text>
+          <Text className="text-xl">{formatCurrency(value)}</Text>
         </Box>
       </Button>
 

@@ -1,7 +1,4 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const API_BASE_URL = "http://api-5semestre.ddns.net:3000/expenses";
+import api from "@/src/lib/api";
 
 const convertDateToISO = (dateStr: string): string => {
   const [day, month, year] = dateStr.split("/");
@@ -24,13 +21,6 @@ export interface CreateExpenseRequest {
 
 export const createExpense = async (data: CreateExpenseRequest) => {
   try {
-    const token = await AsyncStorage.getItem("authToken");
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    };
-
     const formData = new FormData();
     formData.append("value", String(data.value));
     formData.append("userId", data.userId);
@@ -50,7 +40,7 @@ export const createExpense = async (data: CreateExpenseRequest) => {
 
     console.log("Enviando reembolso com imagem:", data.image);
 
-    const response = await axios.post(API_BASE_URL, formData, { headers });
+    const response = await api.post('/expenses', formData);
     return response.data;
   } catch (error: any) {
     console.error("Erro ao criar reembolso:", error.response?.data || error);
