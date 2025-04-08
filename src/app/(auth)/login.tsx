@@ -24,6 +24,7 @@ export default function Login() {
     try {
       const response = await login({ email, password: senha });
 
+      await AsyncStorage.setItem("role", response.role)
       await AsyncStorage.setItem("authToken", response.access_token);
       await AsyncStorage.setItem("userId", response.user_id);
 
