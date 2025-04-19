@@ -15,10 +15,30 @@ export async function getRequests(): Promise<Request[]>{
 export async function getRequestsByUser(): Promise<Request[]>{
     const userId = await AsyncStorage.getItem('userId')
     try{
-        const response = await api.get(`/requests/user/${userId}`)
-        return response.data
+        const response = await api.get(`/requests`)
+        
+        // Backend está retornando [] na rota /requests/[user_id], arrumar e remover esse .filter
+        const newData = response.data.filter((item: any) => item.user._id === userId)
+        return newData
     }catch(e){
         console.error(e)
         throw e
     } 
+}
+
+export async function createRequest(title: string, projectId: string){
+    const userId = await AsyncStorage.getItem('userId')
+    try{
+        const response = await api.post(`/requests`, {
+            title,
+            projectId,
+            userId
+        })
+
+        return response.data
+    }catch(e: any){
+        console.error(e)
+        console.log(projectId)
+        throw e
+    }
 }

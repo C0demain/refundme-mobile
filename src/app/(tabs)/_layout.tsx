@@ -49,10 +49,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="requests"
+        name="requests/index"
         options={{
           title: "Solicitações",
           tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name='requests/new'
+        options={{
+          href: null
         }}
       />
     </Tabs>

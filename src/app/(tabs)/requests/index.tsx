@@ -8,6 +8,7 @@ import { Accordion, AccordionContent, AccordionHeader, AccordionIcon, AccordionI
 import { ThemedText } from "@/src/components/ThemedText"
 import { formatCurrency } from "@/src/utils/formatters/currencyFormatter"
 import { formatDate } from "@/src/utils/formatters/dateFormatter"
+import { Link } from 'expo-router'
 
 const statusColors = {
     'Pendente': 'bg-yellow-300',
@@ -26,14 +27,15 @@ export default function ListRequests(){
 
     useEffect(()=>{
         fetchRequests()
-    })
+    }, [])
 
     return (
     <Box>
         <Heading size="2xl" className="px-3 py-3 my-3">Solicitações</Heading>
+        <Link href="/requests/new">Nova solicitação</Link>
         <Accordion>
         <FlatList data={requests} keyExtractor={item => item._id} renderItem={({item}: ListRenderItemInfo<Request>) => 
-            <AccordionItem value={item._id}>
+            <AccordionItem value={item._id} key={item._id}>
             <AccordionHeader>
                 <AccordionTrigger className="flex flex-row justify-between">
                     <ThemedText className="text-2xl">{item.title}</ThemedText>
@@ -46,7 +48,7 @@ export default function ListRequests(){
                     <Text className="mb-2 text-sm text-slate-600">#{item.project.code}</Text>
                 </Box>
                 {item.expenses.map(expense =>
-                    <Box>
+                    <Box key={expense._id}>
                         <Text className="text-sm text-gray-400">{formatDate(expense.date)}</Text>
                         <Box className="flex flex-row justify-between">
                             <ThemedText>{expense.type}</ThemedText>
