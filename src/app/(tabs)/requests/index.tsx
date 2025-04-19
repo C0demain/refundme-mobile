@@ -1,16 +1,15 @@
 import { Box } from "@/components/ui/box"
 import { Heading } from "@/components/ui/heading"
-import { getRequests, getRequestsByUser } from "@/src/api/requestService/request"
-import { useEffect, useState } from "react"
-import { FlatList, ListRenderItem, ListRenderItemInfo, Text, TouchableOpacity } from 'react-native'
+import { getRequestsByUser } from "@/src/api/requestService/request"
+import { useCallback, useEffect, useState } from "react"
+import { FlatList, ListRenderItemInfo, Text, TouchableOpacity } from 'react-native'
 import Request from "@/src/types/request"
-import { Accordion, AccordionContent, AccordionHeader, AccordionIcon, AccordionItem, AccordionTitleText, AccordionTrigger } from "@/components/ui/accordion"
+import { Accordion, AccordionContent, AccordionHeader, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ThemedText } from "@/src/components/ThemedText"
 import { formatCurrency } from "@/src/utils/formatters/currencyFormatter"
 import { formatDate } from "@/src/utils/formatters/dateFormatter"
-import { Link, useRouter } from 'expo-router'
-import { Fab, FabIcon, FabLabel } from "@/components/ui/fab"
-import { AddIcon } from "@/components/ui/icon"
+import { useRouter } from 'expo-router'
+import { RefreshControl } from "react-native-gesture-handler"
 
 const statusColors = {
     'Pendente': 'bg-yellow-300',
@@ -21,12 +20,19 @@ const statusColors = {
 
 export default function ListRequests(){
     const [requests, setRequests] = useState<Request[]>([])
+    const [refreshing, setRefreshing] = useState(false)
     const router = useRouter()
 
     const fetchRequests = async () => {
         const newRequests = await getRequestsByUser()
         setRequests(newRequests)
     }
+
+    const refreshRequests = useCallback(() => {
+        setRefreshing(true)
+        fetchRequests()
+        setRefreshing(false)
+    }, [])
 
     useEffect(()=>{
         fetchRequests()
@@ -44,13 +50,21 @@ export default function ListRequests(){
                 padding: 10,
                 paddingHorizontal: 17,
                 borderRadius: 30,
+                zIndex: 9999,
+                boxShadow: '#0000003d 0px 3px 8px'
             }}
             onPress={() => router.push('/requests/new')} 
         >
             <Text style={{ color: '#fff', fontSize: 18 }}>+</Text> 
         </TouchableOpacity>
         <Accordion>
-        <FlatList data={requests} keyExtractor={item => item._id} renderItem={({item}: ListRenderItemInfo<Request>) => 
+        <FlatList 
+        data={requests}
+        keyExtractor={item => item._id}
+        refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={refreshRequests}/>
+            }
+            renderItem={({item}: ListRenderItemInfo<Request>) => 
             <AccordionItem value={item._id} key={item._id}>
             <AccordionHeader>
                 <AccordionTrigger className="flex flex-row justify-between">

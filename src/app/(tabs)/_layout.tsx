@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function TabLayout() {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <Tabs
       screenOptions={{
         headerShown: true,
@@ -54,13 +56,14 @@ export default function TabLayout() {
           title: "Solicitações",
           tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
         }}
-      />
+        />
       <Tabs.Screen
         name='requests/new'
         options={{
           href: null
         }}
-      />
+        />
     </Tabs>
+    </GestureHandlerRootView>
   );
 }
