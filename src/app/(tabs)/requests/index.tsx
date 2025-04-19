@@ -2,13 +2,15 @@ import { Box } from "@/components/ui/box"
 import { Heading } from "@/components/ui/heading"
 import { getRequests, getRequestsByUser } from "@/src/api/requestService/request"
 import { useEffect, useState } from "react"
-import { FlatList, ListRenderItem, ListRenderItemInfo, Text } from 'react-native'
+import { FlatList, ListRenderItem, ListRenderItemInfo, Text, TouchableOpacity } from 'react-native'
 import Request from "@/src/types/request"
 import { Accordion, AccordionContent, AccordionHeader, AccordionIcon, AccordionItem, AccordionTitleText, AccordionTrigger } from "@/components/ui/accordion"
 import { ThemedText } from "@/src/components/ThemedText"
 import { formatCurrency } from "@/src/utils/formatters/currencyFormatter"
 import { formatDate } from "@/src/utils/formatters/dateFormatter"
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
+import { Fab, FabIcon, FabLabel } from "@/components/ui/fab"
+import { AddIcon } from "@/components/ui/icon"
 
 const statusColors = {
     'Pendente': 'bg-yellow-300',
@@ -19,6 +21,7 @@ const statusColors = {
 
 export default function ListRequests(){
     const [requests, setRequests] = useState<Request[]>([])
+    const router = useRouter()
 
     const fetchRequests = async () => {
         const newRequests = await getRequestsByUser()
@@ -30,9 +33,22 @@ export default function ListRequests(){
     }, [])
 
     return (
-    <Box>
+    <Box className="flex-1">
         <Heading size="2xl" className="px-3 py-3 my-3">Solicitações</Heading>
-        <Link href="/requests/new">Nova solicitação</Link>
+        <TouchableOpacity
+            style={{
+                position: 'absolute',
+                bottom: 20,
+                right: 20,
+                backgroundColor: '#6200EE',
+                padding: 10,
+                paddingHorizontal: 17,
+                borderRadius: 30,
+            }}
+            onPress={() => router.push('/requests/new')} 
+        >
+            <Text style={{ color: '#fff', fontSize: 18 }}>+</Text> 
+        </TouchableOpacity>
         <Accordion>
         <FlatList data={requests} keyExtractor={item => item._id} renderItem={({item}: ListRenderItemInfo<Request>) => 
             <AccordionItem value={item._id} key={item._id}>
