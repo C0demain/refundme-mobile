@@ -7,6 +7,7 @@ import Request from "@/src/types/request"
 import { useRouter } from 'expo-router'
 import { RefreshControl } from "react-native-gesture-handler"
 import StatusBadge from "@/src/components/request/StatusBadge"
+import AddButton from "@/src/components/AddButton"
 
 export default function ListRequests(){
     const [requests, setRequests] = useState<Request[]>([])
@@ -31,22 +32,7 @@ export default function ListRequests(){
     return (
     <Box className="flex-1">
         <Heading size="2xl" className="px-3 py-3 my-3">Solicitações</Heading>
-        <TouchableOpacity
-            style={{
-                position: 'absolute',
-                bottom: 20,
-                right: 20,
-                backgroundColor: '#6200EE',
-                padding: 10,
-                paddingHorizontal: 17,
-                borderRadius: 30,
-                zIndex: 9999,
-                boxShadow: '#0000003d 0px 3px 8px'
-            }}
-            onPress={() => router.push('/requests/new')}
-        >
-            <Text style={{ color: '#fff', fontSize: 18 }}>+</Text> 
-        </TouchableOpacity>
+        <AddButton href='/requests/new'/>
         <FlatList 
         data={requests}
         keyExtractor={item => item._id}

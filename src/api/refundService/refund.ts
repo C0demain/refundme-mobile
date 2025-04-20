@@ -17,6 +17,7 @@ export interface CreateExpenseRequest {
     name?: string;
     type: string;
   };
+  requestId: string
 }
 
 export const createExpense = async (data: CreateExpenseRequest) => {
@@ -26,6 +27,7 @@ export const createExpense = async (data: CreateExpenseRequest) => {
     formData.append("userId", data.userId);
     formData.append("type", data.type);
     formData.append("date", convertDateToISO(data.date));
+    formData.append('requestId', data.requestId)
     if (data.description) formData.append("description", data.description);
 
     console.log(data.image);

@@ -7,12 +7,14 @@ import CurrencyInput from "react-native-currency-input";
 import * as DocumentPicker from "expo-document-picker";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native";
-import { createExpense } from "../../api/refundService/refund";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from 'react-native-toast-message';
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { createExpense } from "@/src/api/refundService/refund";
 
 export default function Refund() {
+  const params = useLocalSearchParams();
+  const request_id = String(params.request_id)
   const [type, setType] = useState("");
   const [value, setValue] = useState<number | null>(null);
   const [description, setDescription] = useState("");
@@ -113,11 +115,11 @@ export default function Refund() {
       date,
       description,
       image,
+      requestId: request_id
     };
   
     try {
       const response = await createExpense(expenseData);
-      console.log("Reembolso cadastrado:", response);
   
       Toast.show({
         type: 'success',
@@ -125,8 +127,16 @@ export default function Refund() {
         text2: 'Reembolso cadastrado com sucesso.',
         position: 'top',
       });
+
+      setDate("")
+      setDescription("")
+      setFile(null)
+      setFileName('')
+      setType('')
+      setValue(null)
+
   
-      router.push("/(tabs)/expenses");
+      router.push({pathname: '/requests/[request_id]', params: {request_id} });
   
     } catch (error) {
       console.error("Erro ao cadastrar reembolso:", error);

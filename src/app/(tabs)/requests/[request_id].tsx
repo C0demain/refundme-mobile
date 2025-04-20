@@ -14,6 +14,7 @@ import { Spinner } from "@/components/ui/spinner";
 import StatusBadge from "@/src/components/request/StatusBadge";
 import EmptyList from "@/src/components/EmptyList";
 import ExpenseItem from "@/src/components/expense/ExpenseItem";
+import AddButton from "@/src/components/AddButton";
 
 export default function RequestPage(){
     const params = useLocalSearchParams();
@@ -44,30 +45,31 @@ export default function RequestPage(){
     }
 
     return (
-        <Box className="mx-auto w-5/6">
+        <Box className="flex-1">
             <FlatList
             data={request?.expenses}
-            contentContainerClassName="gap-6"
+            contentContainerClassName="gap-6 mx-2"
             ListHeaderComponent={
-            <>
-            <Box className="flex-row items-center justify-between">
-                <Heading size="3xl" className="px-3 py-3">{request?.title}</Heading>
-                <StatusBadge status={request?.status}/>
+            <Box className="mx-">
+                <Box className="flex-row items-center justify-between">
+                    <Heading size="3xl" className="px-3 py-3">{request?.title}</Heading>
+                    <StatusBadge status={request?.status}/>
+                </Box>
+                <Box className="flex flex-row justify-between mb-4">
+                    <Text className="mb-2 text-lg">{request?.project.title}</Text>
+                    <Text className="mb-2 text-lg text-gray-500">#{request?.project.code}</Text>
+                </Box>
+                <Text className="text-2xl">Despesas</Text>
             </Box>
-            <Box className="flex flex-row justify-between mb-4">
-                <Text className="mb-2 text-lg">{request?.project.title}</Text>
-                <Text className="mb-2 text-lg text-gray-500">#{request?.project.code}</Text>
-            </Box>
-            <Text className="text-2xl">Despesas</Text>
-            </>
             }
             ListEmptyComponent={<EmptyList text="Ainda não há despesas"/>}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshRequest}/>}
             renderItem={({ item }) => 
                 <ExpenseItem expense={item}/>
-            }  
+        }  
             >
             </FlatList>
+            <AddButton href={{pathname: '/refund/[request_id]', params: { request_id } }}/>
         </Box>
     )
 }

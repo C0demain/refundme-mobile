@@ -37,10 +37,9 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="refund"
+        name="refund/[request_id]"
         options={{
-          title: "Cadastro de Reembolso",
-          tabBarIcon: ({ color, size }) => <Ionicons name="create-outline" size={size} color={color} />,
+          href: null
         }}
       />
       <Tabs.Screen
@@ -60,15 +59,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name='requests/new'
         options={{
-          href: null,
-          presentation: 'modal'
+          href: null
         }}
         />
       <Tabs.Screen
         name='requests/[request_id]'
         options={{
-          href: null,
-          presentation: 'modal'
+          href: null
         }}
         />
     </Tabs>
