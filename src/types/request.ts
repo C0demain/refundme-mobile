@@ -1,3 +1,5 @@
+import Expense from "@/src/types/expense"
+
 export default interface Request{
     _id: string
     code: string
@@ -8,5 +10,5 @@ export default interface Request{
         title: string
     }
     status: string
-    expenses: any[]
+    expenses: Expense[]
 }

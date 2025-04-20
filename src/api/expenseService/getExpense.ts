@@ -1,15 +1,6 @@
 import api from "@/src/lib/api";
+import Expense from "@/src/types/expense";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export interface Expense {
-    value: number;
-    userId: string;
-    type: string;
-    date: string;
-    description: string;
-    image: string;
-    _id: string
-}
 
 export const getExpensesByUser = async (): Promise<Expense[]> => {
     const userId = await AsyncStorage.getItem('userId');

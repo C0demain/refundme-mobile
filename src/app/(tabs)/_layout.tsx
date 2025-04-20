@@ -29,7 +29,7 @@ export default function TabLayout() {
               width: 150, 
               height: 100, 
               resizeMode: 'contain',
-              marginTop: 30, 
+              marginTop: 10, 
             }}
           />
         ),
@@ -60,7 +60,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name='requests/new'
         options={{
-          href: null
+          href: null,
+          presentation: 'modal'
+        }}
+        />
+      <Tabs.Screen
+        name='requests/[request_id]'
+        options={{
+          href: null,
+          presentation: 'modal'
         }}
         />
     </Tabs>
