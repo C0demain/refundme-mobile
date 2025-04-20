@@ -6,10 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import Request from "@/src/types/request"
 import { RefreshControl, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { formatDate } from "@/src/utils/formatters/dateFormatter";
-import { formatCurrency } from "@/src/utils/formatters/currencyFormatter";
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
-import { AlertCircleIcon, GlobeIcon, Icon, PaperclipIcon } from "@/components/ui/icon";
+import { AlertCircleIcon } from "@/components/ui/icon";
 import { Spinner } from "@/components/ui/spinner";
 import StatusBadge from "@/src/components/request/StatusBadge";
 import EmptyList from "@/src/components/EmptyList";

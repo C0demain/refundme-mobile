@@ -4,18 +4,21 @@ import { getRequestsByUser } from "@/src/api/requestService/request"
 import { useCallback, useEffect, useState } from "react"
 import { FlatList, ListRenderItemInfo, Pressable, Text, TouchableOpacity } from 'react-native'
 import Request from "@/src/types/request"
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { RefreshControl } from "react-native-gesture-handler"
 import StatusBadge from "@/src/components/request/StatusBadge"
 import AddButton from "@/src/components/AddButton"
+import { SearchIcon } from "@/components/ui/icon"
+import { Input, InputSlot, InputIcon, InputField } from "@/components/ui/input"
 
 export default function ListRequests(){
     const [requests, setRequests] = useState<Request[]>([])
     const [refreshing, setRefreshing] = useState(false)
+    const [searchText, setSearchText] = useState("")
     const router = useRouter()
 
     const fetchRequests = async () => {
-        const newRequests = await getRequestsByUser()
+        const newRequests = await getRequestsByUser(searchText)
         setRequests(newRequests)
     }
 
@@ -23,15 +26,21 @@ export default function ListRequests(){
         setRefreshing(true)
         fetchRequests()
         setRefreshing(false)
-    }, [])
+    }, [searchText])
 
     useEffect(()=>{
         fetchRequests()
-    }, [])
+    }, [searchText])
 
     return (
     <Box className="flex-1">
         <Heading size="2xl" className="px-3 py-3 my-3">Solicitações</Heading>
+        <Input className="w-5/6 mx-auto border border-[#8a2be2]">
+            <InputSlot className="p-2">
+                <InputIcon as={SearchIcon} />
+            </InputSlot>
+            <InputField placeholder="Procurar por nome ou código..." value={searchText} onChangeText={v => setSearchText(v)} />
+        </Input>
         <AddButton href='/requests/new'/>
         <FlatList 
         data={requests}
