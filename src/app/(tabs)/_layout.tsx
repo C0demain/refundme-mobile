@@ -11,6 +11,7 @@ export default function TabLayout() {
         headerShown: true,
         tabBarActiveTintColor: '#8a2be2',
         tabBarInactiveTintColor: 'gray',
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           height: 80, // 👈 aumenta a altura da tab bar
           paddingBottom: 20, // 👈 opcional: ajusta o ícone mais pra cima
