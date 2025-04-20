@@ -11,4 +11,5 @@ export default interface Request{
     }
     status: string
     expenses: Expense[]
+    isOverLimit: boolean
 }

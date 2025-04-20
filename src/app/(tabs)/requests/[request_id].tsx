@@ -8,8 +8,8 @@ import { RefreshControl, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { formatDate } from "@/src/utils/formatters/dateFormatter";
 import { formatCurrency } from "@/src/utils/formatters/currencyFormatter";
-import { Badge, BadgeText } from "@/components/ui/badge";
-import { Icon, PaperclipIcon } from "@/components/ui/icon";
+import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
+import { AlertCircleIcon, GlobeIcon, Icon, PaperclipIcon } from "@/components/ui/icon";
 import { Spinner } from "@/components/ui/spinner";
 import StatusBadge from "@/src/components/request/StatusBadge";
 import EmptyList from "@/src/components/EmptyList";
@@ -59,6 +59,10 @@ export default function RequestPage(){
                     <Text className="mb-2 text-lg">{request?.project.title}</Text>
                     <Text className="mb-2 text-lg text-gray-500">#{request?.project.code}</Text>
                 </Box>
+                {request?.isOverLimit && <Badge size="lg" variant="solid" action="warning" className="flex flex-row gap-2 justify-between p-3 w-2/3 mx-auto">
+                    <BadgeIcon as={AlertCircleIcon} />
+                    <BadgeText>Esta solicitação está acima do limite</BadgeText>
+                </Badge>}
                 <Text className="text-2xl">Despesas</Text>
             </Box>
             }
