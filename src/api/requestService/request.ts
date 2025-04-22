@@ -52,3 +52,7 @@ export async function createRequest(title: string, projectId: string){
         throw e
     }
 }
+
+export async function updateRequestById(id: string, payload: any) {
+    return await api.patch(`/requests/${id}`, payload); 
+  }

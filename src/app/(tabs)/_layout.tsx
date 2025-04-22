@@ -64,11 +64,19 @@ export default function TabLayout() {
         }}
         />
       <Tabs.Screen
-        name='requests/[request_id]'
+        name='requests/[request_id]/index'
         options={{
           href: null
         }}
         />
+
+      <Tabs.Screen
+        name='requests/[request_id]/edit'
+        options={{
+          href: null
+        }}
+      />
+       
     </Tabs>
     </GestureHandlerRootView>
   );
