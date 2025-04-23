@@ -51,14 +51,14 @@ export default function RequestPage() {
         data={request?.expenses}
         contentContainerClassName="gap-6 mx-2 mb-6"
         ListHeaderComponent={
-          <Box className="mx-">
+          <Box className="">
             <Box className="flex-row items-center justify-between">
-              <Heading size="3xl" className="px-3 py-3">
+              <Heading size="3xl" className="p-3 flex-1">
                 {request?.title}
               </Heading>
               <StatusBadge status={request?.status} />
             </Box>
-            <Box className="flex flex-row justify-between mb-4">
+            <Box className="flex-row justify-between mb-4 p-3">
               <Text className="mb-2 text-lg">{request?.project.title}</Text>
               <Text className="mb-2 text-lg text-gray-500">
                 #{request?.project.code}

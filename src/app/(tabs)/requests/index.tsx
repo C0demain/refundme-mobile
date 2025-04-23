@@ -2,9 +2,9 @@ import { Box } from "@/components/ui/box"
 import { Heading } from "@/components/ui/heading"
 import { getRequestsByUser } from "@/src/api/requestService/request"
 import { useCallback, useEffect, useState } from "react"
-import { FlatList, ListRenderItemInfo, Pressable, Text, TouchableOpacity } from 'react-native'
+import { FlatList, ListRenderItemInfo, Pressable, Text } from 'react-native'
 import Request from "@/src/types/request"
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { RefreshControl } from "react-native-gesture-handler"
 import StatusBadge from "@/src/components/request/StatusBadge"
 import AddButton from "@/src/components/AddButton"
@@ -44,7 +44,7 @@ export default function ListRequests(){
     }, [searchText])
 
     return (
-    <Box className="flex-1">
+    <Box className="flex-auto w-screen">
         <Heading size="2xl" className="px-3 py-3 my-3">Solicitações</Heading>
         <Input className="w-5/6 mx-auto border border-[#8a2be2]">
             <InputSlot className="p-2">
@@ -63,7 +63,7 @@ export default function ListRequests(){
         <Pressable
         className="flex-row justify-between items-center p-3"
         onPress={() => router.push({pathname: '/requests/[request_id]', params: { request_id: item._id} })}>
-            <Box className="gap-1">
+            <Box className="gap-1 flex-1">
                 <Text className="text-lg">{item.title}</Text>
                 <Text className="text-gray-300 text-sm">#{item.code}</Text>
             </Box>
