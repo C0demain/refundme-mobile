@@ -10,6 +10,7 @@ import StatusBadge from "@/src/components/request/StatusBadge"
 import AddButton from "@/src/components/AddButton"
 import { SearchIcon } from "@/components/ui/icon"
 import { Input, InputSlot, InputIcon, InputField } from "@/components/ui/input"
+import { useFocusEffect } from "expo-router";
 
 export default function ListRequests(){
     const [requests, setRequests] = useState<Request[]>([])
@@ -29,6 +30,16 @@ export default function ListRequests(){
     }, [searchText])
 
     useEffect(()=>{
+        fetchRequests()
+    }, [searchText])
+
+     useFocusEffect(
+        useCallback(() => {
+            fetchRequests()
+        }, [searchText])
+    )
+
+    useEffect(() => {
         fetchRequests()
     }, [searchText])
 
