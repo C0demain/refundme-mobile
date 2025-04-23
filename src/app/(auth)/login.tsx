@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from "react"; 
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Input, InputField } from "@/components/ui/input";
@@ -24,7 +24,9 @@ export default function Login() {
     try {
       const response = await login({ email, password: senha });
 
-      await AsyncStorage.setItem("role", response.role)
+      if (!response) throw new Error("Login falhou");
+
+      await AsyncStorage.setItem("role", response.role);
       await AsyncStorage.setItem("authToken", response.access_token);
       await AsyncStorage.setItem("userId", response.user_id);
 
@@ -35,6 +37,9 @@ export default function Login() {
         position: "top",
       });
 
+      setEmail("");
+      setSenha("");
+
       router.push("/(tabs)/expenses");
     } catch (err) {
       Toast.show({
@@ -44,9 +49,8 @@ export default function Login() {
         position: "top",
       });
     } finally {
+      
       setLoading(false);
-      setEmail("");
-      setSenha("");
     }
   };
 
