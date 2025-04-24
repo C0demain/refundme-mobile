@@ -104,6 +104,16 @@ export default function RequestPage() {
           </Button>
         </Link>
       </Box>
+            <Box className="px-4 pb-6  items-center">
+                <Link
+                    href={{ pathname: "/requests/[request_id]/delete", params: { request_id } }}
+                    asChild
+                >
+                    <Button className="w-2/3 bg-[#8a2be2] rounded-lg">
+                        <Text className="text-white text-base font-semibold">Excluir Solicitação</Text>
+                    </Button>
+                </Link>
+            </Box>
     </Box>
   );
 }

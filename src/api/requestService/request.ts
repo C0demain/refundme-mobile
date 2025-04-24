@@ -28,6 +28,20 @@ export async function getRequestsByUser(search?: string, status?: string): Promi
     } 
 }
 
+export async function deleteRequest(id: string): Promise<void> {
+    try {
+        const response = await api.delete(`/requests/${id}`);
+        
+        if (!response || !response.data) {
+            throw new Error("Resposta inválida ou sem dados");
+        }
+
+        console.log("Solicitação excluída com sucesso!");
+    } catch (e) {
+        console.error("Erro ao excluir a solicitação:", e);
+        throw e;
+    }
+}
 export async function getRequestById(id: string): Promise<Request | null>{
     try{
         const response = await api.get(`/requests/${id}`)

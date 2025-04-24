@@ -48,6 +48,7 @@ export default function TabLayout() {
         options={{
           title: "Lista de Reembolsos",
           tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+          href: null
         }}
       />
       <Tabs.Screen
@@ -72,6 +73,12 @@ export default function TabLayout() {
 
       <Tabs.Screen
         name='requests/[request_id]/edit'
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
+        name='requests/[request_id]/delete'
         options={{
           href: null
         }}
