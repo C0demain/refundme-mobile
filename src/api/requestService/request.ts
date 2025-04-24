@@ -12,14 +12,16 @@ export async function getRequests(): Promise<Request[]>{
     } 
 }
 
-export async function getRequestsByUser(search?: string): Promise<Request[]>{
+export async function getRequestsByUser(search?: string, status?: string): Promise<Request[]>{
     const userId = await AsyncStorage.getItem('userId')
+    let statusFilter = status
+    if(statusFilter && statusFilter.trim() === ""){
+        statusFilter = undefined
+    }
     try{
-        const response = await api.get(`/requests`, {params: { search } })
+        const response = await api.get(`/requests/user/${userId}`, {params: { search, status: statusFilter } })
 
-        // Backend está retornando [] na rota /requests/[user_id], arrumar e remover esse .filter
-        const newData = response.data.filter((item: any) => item.user._id === userId)
-        return newData
+        return response.data
     }catch(e){
         console.error(e)
         throw e
