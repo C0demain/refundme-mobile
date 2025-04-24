@@ -40,7 +40,7 @@ export default function Login() {
       setEmail("");
       setSenha("");
 
-      router.push("/(tabs)/expenses");
+      router.push("/(tabs)/requests");
     } catch (err) {
       Toast.show({
         type: "error",
