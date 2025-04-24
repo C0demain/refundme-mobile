@@ -70,7 +70,7 @@ export default function ConfirmDeleteRequest() {
           variant="outline"
           action="secondary"
           className="flex-1 border-gray-300"
-          onPress={() => router.back()}
+          onPress={() => router.replace("/requests")}
         >
           <ButtonText>Cancelar</ButtonText>
         </Button>
