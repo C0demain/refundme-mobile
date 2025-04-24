@@ -18,3 +18,5 @@ export const getExpensesByUser = async (): Promise<Expense[]> => {
         return [];
     }
 };
+
+export { Expense };
