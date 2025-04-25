@@ -4,12 +4,24 @@ import Project from "@/src/types/project";
 export const getAllProjects = async (search?: string): Promise<Project[]> => {
     try {
         const response = await api.get("/projects", {params: { search } })
-        console.log("esse é o certo",response.data)
         return response.data ?? []
     } catch (error) {
         return []
     }
 }
+
+
+export const getProjectById = async (id: string) => {
+    try {
+        console.log("solicitou")
+        const response = await api.get(`/projects/${id}`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        return error
+    }
+};
+
 
 export const deleteProject = async(id:string) => {
     try {

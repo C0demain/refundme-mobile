@@ -19,7 +19,7 @@ const colors = {
   Aprovada: "#4ade80",
   Recusada: "#f87171",
   Rascunho: "#c084fc",
-  Total: "#aeff85",
+  Total: "#16a34a",
 };
 
 const RequestPieChart: React.FC<RequestPieChartProps> = ({ statusCounts }) => {
