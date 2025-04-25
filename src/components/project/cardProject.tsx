@@ -5,6 +5,9 @@ import Project from "@/src/types/project";
 import { useState } from "react";
 import { View, ActivityIndicator, Text, Image } from "react-native";
 import { Box } from "@/components/ui/box";
+import RequestPieChart from "@/src/components/project/RequestPieChart";
+import DeleteProject from "./DeleteProject";
+
 
 interface CardProjectProps{
     project: Project;
@@ -13,7 +16,6 @@ interface CardProjectProps{
 
 const CardProject: React.FC<CardProjectProps> = ({project, onDelete}) => {
     const [showAlertDialog, setShowAlertDialog] = useState(false);
-    const [loadingImage, setLoadingImage] = useState(true);
 
     const handleClose = () => setShowAlertDialog(false);
 
@@ -22,9 +24,15 @@ const CardProject: React.FC<CardProjectProps> = ({project, onDelete}) => {
         onDelete();
     };
 
+    // Calcula a soma das despesas utilizando o campo _v de cada request
+    const totalExpenses = project.requests.reduce((total, request) => {
+        // Somando o valor de _v de cada request, que já contém a soma das despesas
+        return total + (request._v || 0);
+    }, 0);
+
     return (
         <>
-            <Button onPress={() => setShowAlertDialog(true)} className="flex flex-col h-min shadow-lg mx-0 bg-white items-start p-4 w-full data-[active=true]:bg-gray-200">
+            <Button onPress={() => setShowAlertDialog(true)} className="flex flex-col h-min shadow-lg bg-white items-start p-4 data-[active=true]:bg-gray-200 mt-2 mx-2 rounded-md">
                 <Text>#{project.code}</Text>
                 <Box className="flex flex-row justify-between w-full">
                     <Text className="text-lg">Título: {project.title}</Text>
@@ -44,14 +52,20 @@ const CardProject: React.FC<CardProjectProps> = ({project, onDelete}) => {
                 <AlertDialogBody className="mt-3 mb-4">
                     <Text>Código: {project.code}</Text>
                     <Text>Descrição: {project.description}</Text>
-                    <Text>Limite de gastos: {project.limit}</Text>
+                    <Text>Limite de gastos: R${project.limit}</Text>
+                    <Text>Nº de participantes: {project.users ? project.users.length : 0}</Text>
+                    <Text>Soma dos valores das solicitações: {totalExpenses.toFixed(2)}</Text>
 
-                    <View style={{ width: 200, height: 200, alignItems: "center" }}>
-                        <Text className="">Solicitações:</Text>
-                        <Text>Total:</Text>
-                        <Text>Pendente:</Text>
-                        <Text>Aprovadas:</Text>
-                        <Text>Recusadas:</Text>
+                    <View style={{ width: 200, marginTop: 10}}>
+                        <RequestPieChart
+                            statusCounts={{
+                                Total: project.requests.length,
+                                Pendente: project.requests.filter(r => r.status === "Pendente").length,
+                                Aprovada: project.requests.filter(r => r.status === "Aprovada").length,
+                                Recusada: project.requests.filter(r => r.status === "Recusada").length,
+                                Rascunho: project.requests.filter(r => r.status === "Rascunho").length,
+                            }}
+                        />
                     </View>
                 </AlertDialogBody>
 
@@ -59,6 +73,7 @@ const CardProject: React.FC<CardProjectProps> = ({project, onDelete}) => {
                     <Button size="sm" onPress={handleClose}>
                     <ButtonText>Fechar</ButtonText>
                     </Button>
+                    <DeleteProject id={project._id} onDelete={handleDelete}/>
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
