@@ -14,6 +14,7 @@ export default interface Project {
         code: string;
         _v: number
     }]
-    code: string
-    _v: number
+    users: string[];
+    code: string;
+    _v: number;
 }
