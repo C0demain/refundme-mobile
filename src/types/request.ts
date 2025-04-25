@@ -1,6 +1,6 @@
 import Expense from "@/src/types/expense"
 
-export default interface Request{
+export default interface RequestType{
     _id: string
     code: string
     title: string

@@ -3,7 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import { getRequestById } from "@/src/api/requestService/request";
 import { useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import Request from "@/src/types/request";
+import RequestType from "@/src/types/request";
 import { RefreshControl, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import { Link } from "expo-router";
 export default function RequestPage() {
   const params = useLocalSearchParams();
   const request_id = String(params.request_id);
-  const [request, setRequest] = useState<Request | null>(null);
+  const [request, setRequest] = useState<RequestType | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
