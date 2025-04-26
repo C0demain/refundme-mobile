@@ -1,5 +1,6 @@
 import api from "@/src/lib/api";
 import Project from "@/src/types/project";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getAllProjects = async (search?: string): Promise<Project[]> => {
     try {
@@ -10,6 +11,15 @@ export const getAllProjects = async (search?: string): Promise<Project[]> => {
     }
 }
 
+export async function getProjectsByUser(){
+    const userId = await AsyncStorage.getItem('userId')
+    try{
+        const response = await api.get(`/projects/user/${userId}`)
+        return response.data
+    }catch(err){
+        console.log(err)
+    }
+}
 
 export const getProjectById = async (id: string) => {
     try {
