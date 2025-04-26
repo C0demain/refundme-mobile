@@ -8,6 +8,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
+import { ActivityIndicator } from "react-native";
 
 export default function RequestEdit() {
     const router = useRouter();
@@ -15,17 +16,26 @@ export default function RequestEdit() {
     const [title, setTitle] = useState("");
     const [project, setProject] = useState("");
     const [status, setStatus] = useState("Pendente");
+    const [loading, setLoading] = useState(true); // Start as true
 
     const statusOptions = ["Pendente", "Aprovado", "Recusado"];
 
     useEffect(() => {
+        setTitle("");       // Limpa título
+        setProject("");     // Limpa projeto
+        setStatus("Pendente"); // Volta status ao padrão
+        setLoading(true);   // Garante que a tela mostra loader
+        
         const fetchData = async () => {
             try {
-                if (typeof request_id === "string") {
+                if (typeof request_id === 'string') {
                     const data = await getRequestById(request_id);
+                    console.log("request_id:", request_id);
+                    console.log("data:", data);
+
                     if (data) {
                         setTitle(data.title);
-                        setProject(data.project._id);
+                        setProject(data._id);
                         setStatus(data.status || "Pendente");
                     }
                 }
@@ -36,6 +46,8 @@ export default function RequestEdit() {
                     text1: 'Erro ao carregar solicitação',
                     position: 'top'
                 });
+            } finally {
+                setLoading(false); // Stop loader
             }
         };
 
@@ -67,53 +79,59 @@ export default function RequestEdit() {
 
     return (
         <Box className="flex-1 items-center justify-center p-4 bg-white">
-            <Heading size="2xl" className="px-3 py-3 my-3 text-[#8a2be2]">
-                Editar solicitação
-            </Heading>
-            
-            <Box className="w-full space-y-6">
-                <FormControl isRequired>
-                    <FormControlLabel>
-                        <FormControlLabelText>Título</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                        <InputField
-                            size="6xl"
-                            placeholder="Título"
-                            multiline={false}
-                            value={title}
-                            onChangeText={(v) => setTitle(v)}
-                        />
-                    </Input>
-                </FormControl>
-    
-                <FormControl isRequired>
-                    <FormControlLabel>
-                        <FormControlLabelText>Status</FormControlLabelText>
-                    </FormControlLabel>
-                    <Box className="border border-gray-300 rounded-lg px-0">
-                        <Picker
-                            selectedValue={status}
-                            onValueChange={(itemValue) => setStatus(itemValue)}
-                            style={{ height: 50, width: "100%" }}
+            {loading ? (
+                <ActivityIndicator size="large" color="#8a2be2" />
+            ) : (
+                <>
+                    <Heading size="2xl" className="px-3 py-3 my-3 text-[#8a2be2]">
+                        Editar solicitação
+                    </Heading>
+
+                    <Box className="w-full space-y-6">
+                        <FormControl isRequired>
+                            <FormControlLabel>
+                                <FormControlLabelText>Título</FormControlLabelText>
+                            </FormControlLabel>
+                            <Input>
+                                <InputField
+                                    size="6xl"
+                                    placeholder="Título"
+                                    multiline={false}
+                                    value={title}
+                                    onChangeText={(v) => setTitle(v)}
+                                />
+                            </Input>
+                        </FormControl>
+
+                        <FormControl isRequired>
+                            <FormControlLabel>
+                                <FormControlLabelText>Status</FormControlLabelText>
+                            </FormControlLabel>
+                            <Box className="border border-gray-300 rounded-lg px-0">
+                                <Picker
+                                    selectedValue={status}
+                                    onValueChange={(itemValue) => setStatus(itemValue)}
+                                    style={{ height: 50, width: "100%" }}
+                                >
+                                    {statusOptions.map((opt) => (
+                                        <Picker.Item key={opt} label={opt} value={opt} />
+                                    ))}
+                                </Picker>
+                            </Box>
+                        </FormControl>
+
+                        <Button
+                            className="bg-[#8a2be2] rounded-lg mt-8"
+                            onPress={handleUpdate}
                         >
-                            {statusOptions.map((opt) => (
-                                <Picker.Item key={opt} label={opt} value={opt} />
-                            ))}
-                        </Picker>
+                            <ButtonText className="text-white text-sm font-bold">
+                                Atualizar
+                            </ButtonText>
+                        </Button>
                     </Box>
-                </FormControl>
-    
-                <Button
-                    className="bg-[#8a2be2] rounded-lg mt-8"
-                    onPress={handleUpdate}
-                >
-                    <ButtonText className="text-white text-sm font-bold">
-                        Atualizar
-                    </ButtonText>
-                </Button>
-            </Box>
+                </>
+            )}
         </Box>
     );
-    
+
 }

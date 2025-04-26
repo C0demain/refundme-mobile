@@ -57,10 +57,10 @@ export default function ListRequests(){
             <StatusFilterPicker
             selectedValue={status}
             setSelectedValue={setStatus}
-            hiddenOptions={role === 'admin' ? ['Rascunho'] : []}/>
-            <Text className="mx-4">{requests.length} resultados</Text>
+            hiddenOptions={role !== 'admin' ? ['Rascunho'] : []}/>
+            <Text className="mx-4">{requests.length} resultado(s)</Text>
         </Box>
-        {role === 'user' && <AddButton href='/requests/new'/>}
+        {<AddButton href='/requests/new'/>}
         <RequestList data={requests} refreshCallback={refreshRequests} refreshing={refreshing}/>
     </Box>
     )
