@@ -1,5 +1,5 @@
 import { Box } from "@/components/ui/box";
-import getProjects from "@/src/api/projectService/project";
+import { getAllProjects } from "@/src/api/projectService/project";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ export default function ProjectPicker(props: PropsType){
     const [options, setOptions] = useState<any[]>()
 
     const fetchProjects = async () => {
-        const newProjects = await getProjects()
+        const newProjects = await getAllProjects()
         setOptions(newProjects)
     }
 
