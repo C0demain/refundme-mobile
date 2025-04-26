@@ -61,9 +61,9 @@ export default function RequestPage() {
               <StatusBadge status={request?.status} />
             </Box>
             <Box className="flex-row justify-between mb-4 p-3">
-              <Text className="mb-2 text-lg">{request?.project.title}</Text>
+              <Text className="mb-2 text-lg">{request?.project?.title}</Text>
               <Text className="mb-2 text-lg text-gray-500">
-                #{request?.project.code}
+                #{request?.project?.code}
               </Text>
             </Box>
             {request?.isOverLimit && (
