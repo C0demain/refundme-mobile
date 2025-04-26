@@ -1,5 +1,5 @@
 import { Box } from "@/components/ui/box";
-import { getAllProjects, getProjectsByUser } from "@/src/api/projectService/getProjects";
+import { getAllProjects, getProjectsByUser } from "@/src/api/projectService/project";
 import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
