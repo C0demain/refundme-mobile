@@ -49,7 +49,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ id, onDelete }) => {
 
     return (
         <>
-            <Button onPress={() => setShowAlertDialog(true)} action="negative">
+            <Button className="w-28" onPress={() => setShowAlertDialog(true)} action="negative">
                 <ButtonText>Deletar</ButtonText>
             </Button>
             <AlertDialog isOpen={showAlertDialog} onClose={handleClose}>

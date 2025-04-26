@@ -1,13 +1,8 @@
-import { AlertDialog, AlertDialogBackdrop, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
+import { Button } from "@/components/ui/button";
 import Project from "@/src/types/project";
-import { useState } from "react";
-import { View, ActivityIndicator, Text, Image } from "react-native";
+import { Text } from "react-native";
 import { Box } from "@/components/ui/box";
-import RequestPieChart from "@/src/components/project/RequestPieChart";
-import DeleteProject from "./DeleteProject";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 
 interface CardProjectProps{
@@ -16,21 +11,11 @@ interface CardProjectProps{
 }
 
 const CardProject: React.FC<CardProjectProps> = ({project, onDelete}) => {
-    const [showAlertDialog, setShowAlertDialog] = useState(false);
     const router = useRouter()
 
-    const handleClose = () => setShowAlertDialog(false);
-
     const handleDelete = () => {
-        handleClose();
         onDelete();
     };
-
-    // Calcula a soma das despesas utilizando o campo _v de cada request
-    const totalExpenses = project.requests.reduce((total, request) => {
-        // Somando o valor de _v de cada request, que já contém a soma das despesas
-        return total + (request._v || 0);
-    }, 0);
 
     return (
         <>
