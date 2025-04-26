@@ -1,5 +1,5 @@
 import { Box } from "@/components/ui/box";
-import { getProjects, getProjectsByUser } from "@/src/api/projectService/getProjects";
+import { getAllProjects, getProjectsByUser } from "@/src/api/projectService/getProjects";
 import { Picker } from "@react-native-picker/picker";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
@@ -19,7 +19,7 @@ export default function ProjectPicker(props: PropsType){
         if(!!userOnly){
             newProjects = await getProjectsByUser()
         }else{
-            newProjects = await getProjects()
+            newProjects = await getAllProjects()
         }
         setOptions(newProjects)
     }
