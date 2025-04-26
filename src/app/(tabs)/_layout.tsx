@@ -78,6 +78,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name='projects/[project_id]/index'
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
+        name='projects/new'
+        options={{
+          href: null
+        }}
+      />
+      <Tabs.Screen
         name='requests/[request_id]/delete'
         options={{
           href: null

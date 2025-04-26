@@ -3,26 +3,35 @@ import React from "react";
 import { PieChart } from "react-native-svg-charts";
 import { Text as SvgText } from "react-native-svg";
 import { View, Text } from "react-native";
+import Request from "@/src/types/request"; // Se você tiver o tipo "Request" certinho.
 
 interface RequestPieChartProps {
-  statusCounts: {
-    Total: number;
-    Pendente: number;
-    Aprovada: number;
-    Recusada: number;
-    Rascunho: number;
-  };
+  requests: Request[];
 }
 
 const colors = {
-  Pendente: "#facc15",
-  Aprovada: "#4ade80",
-  Recusada: "#f87171",
+  Pendente: "#FCD34D",
+  Aprovado: "#86EFAC",
+  Recusado: "#FCA5A5",
   Rascunho: "#c084fc",
-  Total: "#16a34a",
 };
 
-const RequestPieChart: React.FC<RequestPieChartProps> = ({ statusCounts }) => {
+const RequestPieChart: React.FC<RequestPieChartProps> = ({ requests }) => {
+  const statusCounts = {
+    Pendente: 0,
+    Aprovado: 0,
+    Recusado: 0,
+    Rascunho: 0,
+  };
+
+  requests.forEach((request) => {
+    if (statusCounts.hasOwnProperty(request.status)) {
+      statusCounts[request.status as keyof typeof statusCounts]++;
+    }
+  });
+
+  const total = requests.length;
+
   const chartData = Object.entries(statusCounts)
     .filter(([, count]) => count > 0)
     .map(([status, count], index) => ({
@@ -32,9 +41,9 @@ const RequestPieChart: React.FC<RequestPieChartProps> = ({ statusCounts }) => {
       label: status,
     }));
 
-  // Tipar o "slices" corretamente
-  const Labels = ({ slices }: { slices: Array<{ pieCentroid: [number, number]; data: { amount: number } }> }) =>
-    slices.map((slice, index) => {
+  // Aqui sim, Labels é um COMPONENTE que recebe slices
+  const Labels = ({ slices }: { slices: any[] }) => {
+    return slices.map((slice, index) => {
       const { pieCentroid, data } = slice;
       return (
         <SvgText
@@ -50,29 +59,34 @@ const RequestPieChart: React.FC<RequestPieChartProps> = ({ statusCounts }) => {
         </SvgText>
       );
     });
+  };
 
   return (
     <View style={{ marginTop: 20 }}>
-        {statusCounts.Total>0 ? 
+      {total > 0 ? (
         <>
-            <PieChart
-                style={{ height: 200 }}
-                valueAccessor={({ item }) => item.amount}
-                data={chartData}
-                outerRadius={"95%"}
-            >
-                <Labels slices={[]} />
-            </PieChart>
-            <View style={{ marginTop: 10 }}>
-                {chartData.map((d) => (
-                    <Text key={d.key} style={{ color: d.svg.fill }}>
-                        {d.label}: {d.amount}
-                    </Text>
-                ))}
-            </View>
-        </> : <><Text>Sem solicitações cadastradas</Text></>
-      }
-      
+          <PieChart
+            style={{ height: 200 }}
+            valueAccessor={({ item }) => item.amount}
+            data={chartData}
+            outerRadius={"95%"}
+          >
+            {/* Aqui, certo: você chama o componente separadamente */}
+            <Labels slices={[]} />
+          </PieChart>
+
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ color: "gray" }}>Total: {total}</Text>
+            {chartData.map((d) => (
+              <Text key={d.key} style={{ color: d.svg.fill }}>
+                {d.label}: {d.amount}
+              </Text>
+            ))}
+          </View>
+        </>
+      ) : (
+        <Text>Sem solicitações cadastradas</Text>
+      )}
     </View>
   );
 };
