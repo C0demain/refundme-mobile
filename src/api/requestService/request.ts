@@ -1,18 +1,23 @@
 import api from "@/src/lib/api";
-import Request from "@/src/types/request";
+import RequestType from "@/src/types/request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export async function getRequests(): Promise<Request[]>{
+export async function getRequests(search?: string, status?: string): Promise<RequestType[]>{
+    let statusFilter = status
+    if(statusFilter && statusFilter.trim() === ""){
+        statusFilter = undefined
+    }
     try{
-        const response = await api.get('/requests')
-        return response.data
+        const response = await api.get('/requests', {params: { search, status: statusFilter } })
+        const filteredData = response.data.filter((item: any) => item.status !== 'Rascunho')
+        return filteredData
     }catch(e){
         console.error(e)
         throw e
     } 
 }
 
-export async function getRequestsByUser(search?: string, status?: string): Promise<Request[]>{
+export async function getRequestsByUser(search?: string, status?: string): Promise<RequestType[]>{
     const userId = await AsyncStorage.getItem('userId')
     let statusFilter = status
     if(statusFilter && statusFilter.trim() === ""){
@@ -42,7 +47,7 @@ export async function deleteRequest(id: string): Promise<void> {
         throw e;
     }
 }
-export async function getRequestById(id: string): Promise<Request | null>{
+export async function getRequestById(id: string): Promise<RequestType | null>{
     try{
         const response = await api.get(`/requests/${id}`)
         return response.data

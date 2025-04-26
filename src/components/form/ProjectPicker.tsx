@@ -1,25 +1,36 @@
 import { Box } from "@/components/ui/box";
-import { getAllProjects } from "@/src/api/projectService/project";
+import { getAllProjects, getProjectsByUser } from "@/src/api/projectService/getProjects";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 
 interface PropsType{
     selectedValue: string
     setSelectedValue: React.Dispatch<React.SetStateAction<string>>
+    userOnly?: boolean
 }
 
 export default function ProjectPicker(props: PropsType){
-    const {selectedValue, setSelectedValue} = props
+    const {selectedValue, setSelectedValue, userOnly} = props
     const [options, setOptions] = useState<any[]>()
 
     const fetchProjects = async () => {
-        const newProjects = await getAllProjects()
+        let newProjects = []
+        if(!!userOnly){
+            newProjects = await getProjectsByUser()
+        }else{
+            newProjects = await getAllProjects()
+        }
         setOptions(newProjects)
     }
 
     useEffect(() => {
         fetchProjects()
     }, [])
+
+    useFocusEffect(useCallback(() => {
+        fetchProjects()
+    }, []))
 
     return (
         <Box className="mb-4 border border-[#8a2be2] rounded-lg bg-gray-100 w-full">

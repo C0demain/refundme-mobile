@@ -1,21 +1,16 @@
 import { Box } from "@/components/ui/box"
 import {Text} from 'react-native'
 import { ScrollView } from "react-native-gesture-handler"
+import { StatusOptions, StatusType } from "../types/status"
 
 interface PropsType{
     selectedValue: string | undefined
     setSelectedValue: React.Dispatch<React.SetStateAction<string | undefined>>
+    hiddenOptions?: StatusType[]
 }
 
-const statusList = [
-    "Rascunho",
-    "Pendente",
-    "Aprovado",
-    "Recusado"
-]
-
 export default function StatusFilterPicker(props: PropsType){
-    const {selectedValue, setSelectedValue} = props
+    const {selectedValue, setSelectedValue, hiddenOptions} = props
 
     return (
         <ScrollView horizontal alwaysBounceHorizontal showsHorizontalScrollIndicator={false}>
@@ -28,7 +23,7 @@ export default function StatusFilterPicker(props: PropsType){
                 >
                     Todos
                 </Text>
-                {statusList.map(opt => 
+                {StatusOptions.filter(i => !hiddenOptions?.includes(i)).map(opt => 
                     <Text 
                     className="px-3 py-1 rounded-full font-medium"
                     style={{

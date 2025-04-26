@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { ActivityIndicator, TextInput, View, TouchableOpacity, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const {storeUser} = useAuth()
 
   const senhaRef = useRef<TextInput>(null);
 
@@ -26,9 +28,7 @@ export default function Login() {
 
       if (!response) throw new Error("Login falhou");
 
-      await AsyncStorage.setItem("role", response.role);
-      await AsyncStorage.setItem("authToken", response.access_token);
-      await AsyncStorage.setItem("userId", response.user_id);
+      await storeUser(response.user_id, response.access_token, response.role)
 
       Toast.show({
         type: "success",
@@ -48,6 +48,9 @@ export default function Login() {
         text2: "Verifique o e-mail e a senha.",
         position: "top",
       });
+      
+      console.error(err)
+      router.reload()
     } finally {
       
       setLoading(false);

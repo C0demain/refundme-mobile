@@ -3,7 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import { getRequestById } from "@/src/api/requestService/request";
 import { useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import Request from "@/src/types/request";
+import RequestType from "@/src/types/request";
 import { RefreshControl, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
@@ -15,13 +15,15 @@ import ExpenseItem from "@/src/components/expense/ExpenseItem";
 import AddButton from "@/src/components/AddButton";
 import { Button } from "@/components/ui/button";
 import { Link } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 export default function RequestPage() {
   const params = useLocalSearchParams();
   const request_id = String(params.request_id);
-  const [request, setRequest] = useState<Request | null>(null);
+  const [request, setRequest] = useState<RequestType | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const { role } = useAuth()
 
   const fetchRequest = useCallback(async () => {
     setLoading(true);
@@ -88,11 +90,11 @@ export default function RequestPage() {
         renderItem={({ item }) => <ExpenseItem expense={item} />}
       />
 
-      <AddButton
+      {role === 'user' && request?.status === 'Rascunho' && <AddButton
         href={{ pathname: "/refund/[request_id]", params: { request_id } }}
-      />
+      />}
 
-      <Box className="px-4 pb-6 items-center">
+      {(role === 'admin' || role === 'user' && request?.status === 'Rascunho') && <Box className="px-4 pb-6 items-center">
         <Link
           href={{ pathname: "/requests/[request_id]/edit", params: { request_id } }}
           asChild
@@ -103,17 +105,17 @@ export default function RequestPage() {
             </Text>
           </Button>
         </Link>
-      </Box>
-            <Box className="px-4 pb-6  items-center">
-                <Link
-                    href={{ pathname: "/requests/[request_id]/delete", params: { request_id } }}
-                    asChild
-                >
-                    <Button className="w-2/3 bg-[#8a2be2] rounded-lg">
-                        <Text className="text-white text-base font-semibold">Excluir Solicitação</Text>
-                    </Button>
-                </Link>
-            </Box>
+      </Box>}
+      {(role === 'admin' || role === 'user' && request?.status ==='Rascunho') && <Box className="px-4 pb-6  items-center">
+          <Link
+              href={{ pathname: "/requests/[request_id]/delete", params: { request_id } }}
+              asChild
+          >
+              <Button className="w-2/3 bg-[#8a2be2] rounded-lg">
+                  <Text className="text-white text-base font-semibold">Excluir Solicitação</Text>
+              </Button>
+          </Link>
+      </Box>}
     </Box>
   );
 }

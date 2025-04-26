@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
 import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { AuthProvider } from '@/src/contexts/AuthContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,15 +31,17 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <Toast />
-        <StatusBar style="auto" />
-      </ThemeProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <AuthProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <Toast />
+            <StatusBar style="auto" />
+          </AuthProvider>
+        </ThemeProvider>
     </GluestackUIProvider>
   );
 }
