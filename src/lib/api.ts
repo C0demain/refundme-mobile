@@ -1,3 +1,4 @@
+import { navigate } from "@/src/lib/navigationRef";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -11,7 +12,7 @@ const api = axios.create({
 
 // Interceptor para incluir token
 api.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem("authToken");
+  const token = await AsyncStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -22,7 +23,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       await AsyncStorage.removeItem("authToken"); // Remove token inválido
-      window.location.href = "/login"; // Redireciona para login
+      navigate('/login') // Redireciona para login
     }
     return Promise.reject(error);
   }
