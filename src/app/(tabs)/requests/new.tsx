@@ -62,7 +62,7 @@ export default function NewRequest(){
                     <FormControlLabel>
                         <FormControlLabelText>Projeto</FormControlLabelText>
                     </FormControlLabel>
-                    <ProjectPicker selectedValue={project} setSelectedValue={setProject}/>
+                    <ProjectPicker selectedValue={project} setSelectedValue={setProject} userOnly/>
                 </FormControl>
                 <Button
                 className="bg-[#8a2be2] rounded-lg"
