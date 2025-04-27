@@ -57,7 +57,7 @@ export default function ListRequests(){
             <StatusFilterPicker
             selectedValue={status}
             setSelectedValue={setStatus}
-            hiddenOptions={role !== 'admin' ? ['Rascunho'] : []}/>
+            />
             <Text className="mx-4">{requests.length} resultado(s)</Text>
         </Box>
         {<AddButton href='/requests/new'/>}

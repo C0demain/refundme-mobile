@@ -9,8 +9,7 @@ export async function getRequests(search?: string, status?: string): Promise<Req
     }
     try {
         const response = await api.get('/requests', { params: { search, status: statusFilter } })
-        const filteredData = response.data.filter((item: any) => item.status !== 'Rascunho')
-        return filteredData
+        return response.data
     } catch (e) {
         console.error(e)
         throw e
@@ -76,5 +75,11 @@ export async function createRequest(title: string, projectId: string) {
 }
 
 export async function updateRequestById(id: string, payload: any) {
-    return await api.patch(`/requests/${id}`, payload);
+    try{
+
+        return await api.patch(`/requests/${id}`, payload);
+    }
+    catch(err){
+        console.log(err)
+    }
 }
