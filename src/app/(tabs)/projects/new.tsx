@@ -21,11 +21,19 @@ export default function NewProject() {
       await createProject(title, Number(limit), selectedUsers, description);
       Toast.show({
         type: 'success',
-        text1: 'Projeto criado com sucesso',
+        text1: 'Sucesso!',
+        text2: 'Projeto criado com sucesso',
         position: 'top'
       });
-      // Redirecionar ou limpar o formulário
-      router.push("/projects"); // ajuste para a rota correta
+
+      // Limpa os campos do formulário
+      setTitle("");
+      setLimit("");
+      setDescription("");
+      setSelectedUsers([]);
+
+      // Redirecionar 
+      router.push("/projects");
     } catch (error) {
       Toast.show({
         type: 'error',

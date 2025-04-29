@@ -61,7 +61,8 @@ export default function RequestEdit() {
                 await updateRequestById(request_id, { title, projectId: project, status });
                 Toast.show({
                     type: 'success',
-                    text1: 'Solicitação atualizada com sucesso',
+                    text1: 'Sucesso',
+                    text2: 'Solicitação atualizada com sucesso',
                     position: 'top',
                 });
                 router.push("/requests");

@@ -87,7 +87,7 @@ const ProjectDetails = () => {
                   >
                     <Box className="gap-1 flex-1">
                       <Text className="text-lg">{item.title}</Text>
-                      <Text className="text-gray-600 text-sm">#{item.code}</Text>
+                      <Text className="text-gray-600 text-sm">#{item.code.toLocaleUpperCase()}</Text>
                     </Box>
                     <StatusBadge status={item.status} />
                   </TouchableOpacity>

@@ -19,7 +19,7 @@ export default function RequestItem(props: PropType){
         onPress={() => router.push({pathname: '/requests/[request_id]', params: { request_id: request._id} })}>
             <Box className="gap-1 flex-1">
                 <Text className="text-lg">{request.title}</Text>
-                <Text className="text-gray-300 text-sm">#{request.code}</Text>
+                <Text className="text-gray-500 text-sm">#{request.code.toLocaleUpperCase()}</Text>
             </Box>
             <StatusBadge status={request.status}/>
         </TouchableOpacity>
