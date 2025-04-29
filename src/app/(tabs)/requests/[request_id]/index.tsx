@@ -90,11 +90,11 @@ export default function RequestPage() {
         renderItem={({ item }) => <ExpenseItem expense={item} />}
       />
 
-      {role === 'user' && request?.status === 'Rascunho' && <AddButton
+      {<AddButton
         href={{ pathname: "/refund/[request_id]", params: { request_id } }}
       />}
 
-      {(role === 'admin' || role === 'user' && request?.status === 'Rascunho') && <Box className="px-4 pb-6 items-center">
+      {<Box className="px-4 pb-6 items-center">
         <Link
           href={{ pathname: "/requests/[request_id]/edit", params: { request_id } }}
           asChild
@@ -106,7 +106,7 @@ export default function RequestPage() {
           </Button>
         </Link>
       </Box>}
-      {(role === 'admin' || role === 'user' && request?.status ==='Rascunho') && <Box className="px-4 pb-6  items-center">
+      {<Box className="px-4 pb-6  items-center">
           <Link
               href={{ pathname: "/requests/[request_id]/delete", params: { request_id } }}
               asChild
