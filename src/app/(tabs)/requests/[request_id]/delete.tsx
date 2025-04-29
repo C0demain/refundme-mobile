@@ -38,7 +38,8 @@ export default function ConfirmDeleteRequest() {
         await deleteRequest(request_id);
         Toast.show({
           type: "success",
-          text1: "Solicitação excluída com sucesso",
+          text1: "Sucesso!",
+          text2: "Solicitação excluída com sucesso",
           position: "top",
         });
         router.replace("/requests");
