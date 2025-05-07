@@ -3,10 +3,15 @@ import { user } from "@/src/types/user"
 
 export const getAllUsers = async (search?: string): Promise<user[]> => {
     try {
-        const response = await api.get("/users", {params: { search } })
-        console.log("esse é o certo",response.data)
+        const response = await api.get("/users", { params: { search } })
+        console.log("esse é o certo", response.data)
         return response.data ?? []
     } catch (error) {
         return []
     }
 }
+
+export const getUserById = async (userId: string) => {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+};

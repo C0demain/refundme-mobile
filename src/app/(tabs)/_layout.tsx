@@ -1,9 +1,8 @@
-import { Tabs, useFocusEffect } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import React, { useCallback, useEffect, useState } from 'react';
-import getStoredUser from '@/src/utils/getStoredUser';
+import React from 'react';
 
 export default function TabLayout() {
   return (
@@ -49,7 +48,7 @@ export default function TabLayout() {
         name="expenses"
         options={{
           title: "Lista de Reembolsos",
-          tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => <Ionicons name="list-outline" size={size} color={color} />,
           href: null
         }}
       />
@@ -57,7 +56,7 @@ export default function TabLayout() {
         name="requests/index"
         options={{
           title: "Solicitações",
-          tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => <Ionicons name="list-outline" size={size} color={color} />,
         }}
         />
       <Tabs.Screen
@@ -101,7 +100,14 @@ export default function TabLayout() {
         name='projects/index'
         options={{
           title: "Projetos",
-          tabBarIcon: ({ color, size }) => <Ionicons name="list-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => <Ionicons name="list-outline" size={size} color={color} />,
+        }}
+      />
+       <Tabs.Screen
+        name='profile/[profile_id]/index'
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => <Ionicons name="person-outline" size={size} color={color} />,
         }}
       />
     </Tabs>
