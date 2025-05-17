@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"; 
+import { useRef, useState } from "react";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Input, InputField } from "@/components/ui/input";
@@ -17,7 +17,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const {storeUser} = useAuth()
+  const { storeUser } = useAuth()
 
   const senhaRef = useRef<TextInput>(null);
 
@@ -26,7 +26,7 @@ export default function Login() {
     try {
       const response = await login({ email, password: senha });
 
-      if (!response) throw new Error("Login falhou");
+      if (!response) throw console.log("Erro no login");
 
       await storeUser(response.user_id, response.access_token, response.role)
 
@@ -41,18 +41,24 @@ export default function Login() {
       setSenha("");
 
       router.push("/(tabs)/requests");
-    } catch (err) {
+    } catch (err: any) {
+      let errorMessages: string[] = [];
+
+      try {
+        // Tenta extrair o array de erros da API
+        errorMessages = err.response.data.errors || ["Erro inesperado ao fazer login."];
+      } catch {
+        errorMessages = ["Erro inesperado ao fazer login."];
+      }
+
       Toast.show({
         type: "error",
         text1: "Erro no Login!",
-        text2: "Verifique o e-mail e a senha.",
+        text2: errorMessages.join("\n"),
         position: "top",
       });
-      
-      console.error(err)
-      router.reload()
+
     } finally {
-      
       setLoading(false);
     }
   };
