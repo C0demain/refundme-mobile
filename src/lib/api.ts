@@ -7,6 +7,7 @@ const api = axios.create({
   baseURL: "http://api-5semestre.ddns.net:3000", // URL base da API
   headers: {
     "Content-Type": "application/json",
+    'Client-Type': 'mobile'
   },
 });
 
