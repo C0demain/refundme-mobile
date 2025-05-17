@@ -9,19 +9,11 @@ import { Heading } from "@/components/ui/heading";
 import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionIcon, AccordionContent } from "@/components/ui/accordion";
 import LogoutButton from "@/src/components/user/LogoutButton";
 import { Ionicons } from "@expo/vector-icons";
-
-type User = {
-    _id: string;
-    name: string;
-    email: string;
-    role: string;
-    requests: any[];
-    projects: string[];
-};
+import { user } from "@/src/types/user";
 
 export default function UserProfilePage() {
     const [userId, setUserId] = useState<string | null>(null);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<user | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [refreshing, setRefreshing] = useState(false);
@@ -51,6 +43,7 @@ export default function UserProfilePage() {
             console.log("Buscando usuário com ID:", userId);
             const data = await getUserById(userId);
             setUser(data);
+            console.log(data)
         } catch (error) {
             console.error("Erro ao buscar usuário:", error);
         } finally {

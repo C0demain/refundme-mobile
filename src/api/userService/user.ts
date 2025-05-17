@@ -11,7 +11,12 @@ export const getAllUsers = async (search?: string): Promise<user[]> => {
     }
 }
 
-export const getUserById = async (userId: string) => {
-    const response = await api.get(`/users/${userId}`);
+export const getUserById = async (id: string): Promise<user>  => {
+  try {
+    const response = await api.get(`/users/${id}`);
     return response.data;
+  } catch (error: any) {
+    console.error("Erro na requisição getUserById:", error.response?.status, error.response?.data);
+    throw error;
+  }
 };
