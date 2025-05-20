@@ -14,7 +14,8 @@ import { createExpense } from "@/src/api/refundService/refund";
 
 export default function Refund() {
   const params = useLocalSearchParams();
-  const request_id = String(params.request_id)
+  const request_id = String(params.request_id);
+
   const [type, setType] = useState("");
   const [value, setValue] = useState<number | null>(null);
   const [description, setDescription] = useState("");
@@ -23,6 +24,9 @@ export default function Refund() {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [file, setFile] = useState<{ uri: string; name: string; type: string } | null>(null);
+
+  const [kilometerPerLiter, setKilometerPerLiter] = useState<number | null>(null);
+  const [distance, setDistance] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -39,76 +43,72 @@ export default function Refund() {
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    if (type === "Combustível" && kilometerPerLiter && distance) {
+      const calculatedValue = (distance / kilometerPerLiter) * 6.28;
+      setValue(Number(calculatedValue.toFixed(2)));
+    }
+  }, [type, kilometerPerLiter, distance]);
+
   const handleDateChange = (text: string) => {
     const cleaned = text.replace(/\D/g, "");
-  
     let formatted = cleaned;
-    if (cleaned.length > 2) {
-      formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
-    }
-    if (cleaned.length > 4) {
-      formatted = formatted.slice(0, 5) + '/' + cleaned.slice(4, 8);
-    }
-  
+    if (cleaned.length > 2) formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
+    if (cleaned.length > 4) formatted = formatted.slice(0, 5) + '/' + cleaned.slice(4, 8);
     setDate(formatted);
-  
+
     if (formatted.length === 10) {
       const [day, month, year] = formatted.split('/').map(Number);
-  
-      if (day < 1 || day > 31) {
+      if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > new Date().getFullYear()) {
         Toast.show({
           type: 'error',
-          text1: 'Dia inválido!',
-          text2: 'Informe um dia entre 01 e 31.',
+          text1: 'Data inválida!',
+          text2: 'Confira se a data informada está correta.',
           position: 'top',
         });
-        setDate("")
-        return;
+        setDate("");
       }
-  
-      if (month < 1 || month > 12) {
-        Toast.show({
-          type: 'error',
-          text1: 'Mês inválido!',
-          text2: 'Informe um mês entre 01 e 12.',
-          position: 'top',
-        });
-        setDate("")
-        return;
-      }
-  
-      if (year < 1900 || year > new Date().getFullYear()) {
-        Toast.show({
-          type: 'error',
-          text1: 'Ano inválido!',
-          text2: `Informe um ano entre 1900 e ${new Date().getFullYear()}.`,
-          position: 'top',
-        });
-        setDate("")
-        return;
-      }
-  
     }
-  };  
+  };
 
   const handleRefund = async () => {
-    if (!type || value === null || !date || !userId) {
+    if (!type || !date || !userId) {
       Toast.show({
         type: 'error',
         text1: 'Campos obrigatórios!',
-        text2: 'Preencha Tipo, Valor, Data e Usuário.',
+        text2: 'Preencha Tipo, Data e Usuário.',
         position: 'top',
       });
       return;
     }
-  
+
+    if (type !== "Combustível" && (value === null || value === 0)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Campos obrigatórios!',
+        text2: 'Preencha o Valor.',
+        position: 'top',
+      });
+      return;
+    }
+
+    if (type === "Combustível" && (kilometerPerLiter === null || distance === null)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Campos obrigatórios!',
+        text2: 'Preencha km/litro e distância em km.',
+        position: 'top',
+      });
+      return;
+    }
+
     setLoading(true);
-  
+
     const image = fileName
       ? { uri: file?.uri, name: fileName.split("/").pop(), type: file?.type || "application/octet-stream" }
       : undefined;
-  
-    const expenseData = {
+
+    const expenseData: any = {
       value,
       userId,
       type,
@@ -117,10 +117,14 @@ export default function Refund() {
       image,
       requestId: request_id
     };
-  
+
+    if (type === "Combustível") {
+      expenseData.kilometerPerLiter = kilometerPerLiter;
+      expenseData.distance = distance;
+    }
+
     try {
-      const response = await createExpense(expenseData);
-  
+      await createExpense(expenseData);
       Toast.show({
         type: 'success',
         text1: 'Sucesso!',
@@ -128,16 +132,16 @@ export default function Refund() {
         position: 'top',
       });
 
-      setDate("")
-      setDescription("")
-      setFile(null)
-      setFileName('')
-      setType('')
-      setValue(null)
+      setDate("");
+      setDescription("");
+      setFile(null);
+      setFileName("");
+      setType("");
+      setValue(null);
+      setKilometerPerLiter(null);
+      setDistance(null);
 
-  
-      router.push({pathname: '/requests/[request_id]', params: {request_id} });
-  
+      router.push({ pathname: "/requests/[request_id]", params: { request_id } });
     } catch (error) {
       console.error("Erro ao cadastrar reembolso:", error);
       Toast.show({
@@ -150,21 +154,17 @@ export default function Refund() {
       setLoading(false);
     }
   };
-  
 
   const pickDocument = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*",
-      });
-
+      const result = await DocumentPicker.getDocumentAsync({ type: "*/*" });
       if (!result.canceled) {
         const file = result.assets[0];
         setFileName(file.name);
         setFile({
-          uri: file.uri, // Garante que o caminho é completo
+          uri: file.uri,
           name: file.name,
-          type: file.mimeType || "application/octet-stream", // Defina um tipo padrão
+          type: file.mimeType || "application/octet-stream",
         });
       }
     } catch (error) {
@@ -187,24 +187,51 @@ export default function Refund() {
           <Picker.Item label="Transporte" value="Transporte" />
           <Picker.Item label="Papelaria" value="Papelaria" />
           <Picker.Item label="Hospedagem" value="Hospedagem" />
+          <Picker.Item label="Combustível" value="Combustível" />
         </Picker>
       </Box>
 
-      <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
-        <CurrencyInput
-          value={value}
-          onChangeValue={setValue}
-          prefix="R$ "
-          delimiter="."
-          separator=","
-          precision={2}
-          minValue={0}
-          maxLength={12}
-          keyboardType="numeric"
-          placeholder="Valor"
-          className="w-full p-2 text-gray-800"
-        />
-      </Input>
+      {type === "Combustível" && (
+        <>
+          <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
+            <InputField
+              placeholder="Km por litro (km/L)"
+              keyboardType="numeric"
+              value={kilometerPerLiter?.toString() || ""}
+              onChangeText={(text) => setKilometerPerLiter(Number(text))}
+              className="w-full p-2 placeholder:text-gray-500"
+            />
+          </Input>
+
+          <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
+            <InputField
+              placeholder="Distância percorrida (Km)"
+              keyboardType="numeric"
+              value={distance?.toString() || ""}
+              onChangeText={(text) => setDistance(Number(text))}
+              className="w-full p-2 placeholder:text-gray-500"
+            />
+          </Input>
+        </>
+      )}
+
+      {type !== "Combustível" && (
+        <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
+          <CurrencyInput
+            value={value}
+            onChangeValue={setValue}
+            prefix="R$ "
+            delimiter="."
+            separator=","
+            precision={2}
+            minValue={0}
+            maxLength={12}
+            keyboardType="numeric"
+            placeholder="Valor"
+            className="w-full p-2 text-gray-800"
+          />
+        </Input>
+      )}
 
       <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
         <InputField
@@ -237,15 +264,11 @@ export default function Refund() {
         <Text className="mb-4 text-gray-800 italic">📂 {fileName}</Text>
       )}
 
-      <Button
-        className="items-center justify-center w-80 bg-[#8a2be2] rounded-lg p-3 flex-row"
-        onPress={handleRefund}
-        disabled={loading}
-      >
+      <Button className="w-80 mb-4 bg-[#8a2be2] rounded-lg p-3 items-center justify-center" onPress={handleRefund}>
         {loading ? (
-          <ActivityIndicator size="small" color="#fff" />
+          <ActivityIndicator color="#fff" />
         ) : (
-          <ButtonText className="text-white text-sm font-bold">Cadastrar</ButtonText>
+          <ButtonText className="text-white text-sm font-bold">Cadastrar Reembolso</ButtonText>
         )}
       </Button>
     </Box>
