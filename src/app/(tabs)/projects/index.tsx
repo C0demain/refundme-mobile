@@ -20,7 +20,7 @@ export default function Projects() {
     const getProjects = async () => {
         try {
             setLoading(true)
-            const response = await getAllProjects(searchText)
+            const response = await getAllProjects(0,0,searchText)
             setProjects(response ?? [])
         } catch (error) {
             console.error("Erro ao listar projetos")
