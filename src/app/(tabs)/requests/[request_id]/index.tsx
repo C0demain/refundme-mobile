@@ -12,7 +12,6 @@ import { Spinner } from "@/components/ui/spinner";
 import StatusBadge from "@/src/components/request/StatusBadge";
 import EmptyList from "@/src/components/EmptyList";
 import ExpenseItem from "@/src/components/expense/ExpenseItem";
-import AddButton from "@/src/components/AddButton";
 import { Button } from "@/components/ui/button";
 import { Link } from "expo-router";
 import { useAuth } from "@/src/contexts/AuthContext";
@@ -23,7 +22,6 @@ export default function RequestPage() {
   const [request, setRequest] = useState<RequestType | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const { role } = useAuth()
 
   const fetchRequest = useCallback(async () => {
     setLoading(true);
@@ -61,6 +59,7 @@ export default function RequestPage() {
         contentContainerClassName="gap-6 px-4 pb-6"
         ListHeaderComponent={
           <Box className="gap-4">
+
             {/* Título e status */}
             <Box className="flex-row items-start justify-between mt-4">
               <Box className="flex-1 pr-2">
@@ -84,6 +83,16 @@ export default function RequestPage() {
               </Text>
               <Text className="text-lg text-purple-800 font-bold">
                 {formatCurrency(request?.project?.limit || 0)}
+              </Text>
+            </Box>
+
+            {/* Soma das despesas */}
+            <Box className="bg-gray-50 rounded-md px-4 py-3 shadow-sm border border-gray-200">
+              <Text className="text-base text-gray-800 font-semibold">
+                Soma das despesas
+              </Text>
+              <Text className="text-lg text-purple-800 font-bold">
+                {formatCurrency(request?.totalExpensesValue || 0)}
               </Text>
             </Box>
 

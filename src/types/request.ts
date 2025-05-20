@@ -13,4 +13,5 @@ export default interface RequestType{
     status: string
     expenses: Expense[]
     isOverLimit: boolean
+    totalExpensesValue: number
 }
