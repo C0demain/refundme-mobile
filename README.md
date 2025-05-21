@@ -1,50 +1,31 @@
-# Welcome to your Expo app 👋
+![RefundMe](docs/banner-refundme.png)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# RefundMe - Mobile (App do Funcionário)
 
-## Get started
+Este é o repositório da aplicação mobile do projeto RefundMe, destinada ao **registro de solicitações de reembolso** por parte dos colaboradores da empresa.
 
-1. Install dependencies
+## 📲 Objetivo
 
-   ```bash
-   npm install
-   ```
+Permitir que colaboradores não administradores cadastrem despesas, anexem comprovantes, visualizem projetos e acompanhem o status de suas solicitações de reembolso.
 
-2. Start the app
+## ⚙️ Tecnologias Utilizadas
 
-   ```bash
-    npx expo start
-   ```
+- [React Native](https://reactnative.dev/) com [TypeScript](https://www.typescriptlang.org/)
+- [Expo](https://expo.dev/) para facilitar o desenvolvimento e testes
+- [Gluestack UI](https://gluestack.io/) e [TailwindCSS](https://tailwindcss.com/) para estilização e componentes
 
-In the output, you'll find options to open the app in a
+## 🔐 Acesso
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Apenas **usuários comuns (não-admin)** têm acesso à aplicação mobile.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## ✨ Funcionalidades Exclusivas
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Cadastro de **novas solicitações de reembolso**
+- Registro de **despesas**, com:
+  - Tipo de despesa (valor fixo ou quantidade)
+  - Valor ou quantidade
+  - Descrição
+  - Anexo de imagem (comprovante)
+- Visualização de **projetos disponíveis**
+- Acompanhamento do **status das solicitações**
+- Alerta se o valor informado exceder o limite permitido
