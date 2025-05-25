@@ -131,9 +131,6 @@ const ProjectDetails = () => {
 
       <Divider className="bg-gray-700 my-2" orientation="horizontal" />
 
-      <Box>
-        <DeleteProject id={project_id} onDelete={ () => router.push({ pathname: "/projects"})}/>
-      </Box>
     </ScrollView>
   );
 };

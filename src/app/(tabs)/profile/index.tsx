@@ -109,11 +109,11 @@ export default function UserProfilePage() {
 
             <Box className="bg-white p-4">
                 <Accordion type="single" collapsable defaultValue={[]}>
-                    <AccordionItem value="projects">
+                    <AccordionItem value="requests">
                         <AccordionHeader>
                             <AccordionTrigger onPress={() => setIsExpanded(!isExpanded)}>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
-                                    <Heading size="md">Ver projetos vinculados</Heading>
+                                    <Heading size="md">Ver solicitações criadas</Heading>
                                     <Ionicons
                                         name={isExpanded ? "chevron-up" : "chevron-down"}
                                         size={20}
@@ -126,21 +126,32 @@ export default function UserProfilePage() {
                         </AccordionHeader>
 
                         <AccordionContent>
-                            <FlatList
-                                data={user.projects}
-                                keyExtractor={(item) => item}
-                                scrollEnabled={false}
-                                renderItem={({ item }) => (
-                                    <>
-                                        <Box className="gap-1 flex-1">
-                                            <Text className="text-md mt-2">Projeto ID:</Text>
-                                            <Text className="text-gray-600 text-sm">{item}</Text>
+                            {user.requests?.length === 0 ? (
+                                <Text className="text-gray-500 mt-2">Nenhuma solicitação criada.</Text>
+                            ) : (
+                                <FlatList
+                                    data={user.requests}
+                                    keyExtractor={(item) => item._id}
+                                    scrollEnabled={false}
+                                    renderItem={({ item }) => (
+                                        <Box className="gap-1 flex-1 mt-2">
+                                            <Box className="flex-row items-center mb-1">
+                                                <Text className="font-bold text-md">Título:</Text>
+                                                <Text className="text-gray-600 text-md ml-5">{item.title}</Text>
+                                            </Box>
+                                            <Box className="flex-row items-center mb-1">
+                                                <Text className="font-bold text-md">Status:</Text>
+                                                <Text className="text-gray-600 text-md ml-5">{item.status}</Text>
+                                            </Box>
+                                            <Divider className="bg-gray-300 my-2" />
                                         </Box>
-                                    </>
-                                )}
-                            />
+
+                                    )}
+                                />
+                            )}
                         </AccordionContent>
                     </AccordionItem>
+
                 </Accordion>
             </Box>
 

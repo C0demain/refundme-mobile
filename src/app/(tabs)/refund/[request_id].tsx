@@ -190,10 +190,11 @@ export default function Refund() {
           <Picker.Item label="Combustível" value="Combustível" />
         </Picker>
       </Box>
-
+      
       {type === "Combustível" && (
         <>
-          <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100">
+        <Text className="text-gray-600 mb-2">Valor médio do Litro do Combustível: R$6,28</Text>
+          <Input className="w-80 mb-4 border border-[#8a2be2] rounded-lg bg-gray-100 mt-2">
             <InputField
               placeholder="Km por litro (km/L)"
               keyboardType="numeric"

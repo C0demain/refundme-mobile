@@ -134,24 +134,7 @@ export default function RequestPage() {
             <Text className="text-white text-base font-semibold">Cadastrar Despesa</Text>
           </Button>
         </Link>
-
-        <Link
-          href={{ pathname: "/requests/[request_id]/edit", params: { request_id } }}
-          asChild
-        >
-          <Button className="w-full bg-purple-800 rounded-lg shadow-md mb-2" size="lg">
-            <Text className="text-white text-base font-semibold">Editar Solicitação</Text>
-          </Button>
-        </Link>
-
-        <Link
-          href={{ pathname: "/requests/[request_id]/delete", params: { request_id } }}
-          asChild
-        >
-          <Button className="w-full bg-red-500 rounded-lg shadow-md" size="lg">
-            <Text className="text-white text-base font-semibold">Excluir Solicitação</Text>
-          </Button>
-        </Link>
+        
       </Box>
     </Box>
   );
