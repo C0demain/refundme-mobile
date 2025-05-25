@@ -1,6 +1,6 @@
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
-import { getRequestById } from "@/src/api/requestService/request";
+import { getRequestById, updateRequestById } from "@/src/api/requestService/request";
 import { useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import RequestType from "@/src/types/request";
@@ -15,6 +15,8 @@ import ExpenseItem from "@/src/components/expense/ExpenseItem";
 import { Button } from "@/components/ui/button";
 import { Link } from "expo-router";
 import { useAuth } from "@/src/contexts/AuthContext";
+import Toast from "react-native-toast-message";
+import { navigate } from "@/src/lib/navigationRef";
 
 export default function RequestPage() {
   const params = useLocalSearchParams();
@@ -40,6 +42,28 @@ export default function RequestPage() {
       fetchRequest();
     }, [fetchRequest])
   );
+
+  const changeStatus = async () => {
+    try{
+      if(request){
+        await updateRequestById(request?._id, {status: 'Pendente'})
+        Toast.show({
+        type: "success",
+        text1: "Solicitação enviada para análise",
+        position: "top",
+      })
+
+      navigate('/requests')
+      }
+    }catch(e){
+      console.error(e)
+      Toast.show({
+        type: "error",
+        text1: "Erro ao enviar solicitação para análise. Tente novamente mais tarde",
+        position: "top",
+      })
+    }
+  }
 
   if (loading) {
     return <Spinner size="large" className="h-full w-full" color="#8a2be2" />;
@@ -126,14 +150,22 @@ export default function RequestPage() {
 
       {/* Botões de ação */}
       <Box className="px-4 pt-4 pb-2 space-y-3 bg-white border-t border-gray-200">
+        {request?.status === 'Rascunho' && 
+        <>
         <Link
           href={{ pathname: "/refund/[request_id]", params: { request_id } }}
           asChild
-        >
+          >
           <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg">
             <Text className="text-white text-base font-semibold">Cadastrar Despesa</Text>
           </Button>
         </Link>
+
+          <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg" onPress={changeStatus}>
+            <Text className="text-white text-base font-semibold">Enviar para análise</Text>
+          </Button>
+        </>
+        }
         
       </Box>
     </Box>
