@@ -29,7 +29,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ id, onDelete }) => {
             Toast.show({
                 type: 'success',
                 text1: 'Sucesso!',
-                text2: 'Reembolso excluído com sucesso.',
+                text2: 'Projeto excluído com sucesso.',
                 position: 'top',
             });
         } catch (error) {
@@ -38,7 +38,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ id, onDelete }) => {
             Toast.show({
                 type: 'error',
                 text1: 'Erro!',
-                text2: 'Não foi possível excluir o reembolso.',
+                text2: 'Não foi possível excluir o projeto.',
                 position: 'top',
             });
         } finally {

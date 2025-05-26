@@ -7,9 +7,11 @@ export default interface RequestType{
     project: {
         _id: string,
         code: string,
-        title: string
-    }
+        title: string,
+        limit: number
+    }  
     status: string
     expenses: Expense[]
     isOverLimit: boolean
+    totalExpensesValue: number
 }

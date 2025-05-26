@@ -19,7 +19,8 @@ export default function NewRequest(){
             await createRequest(title, project)
             Toast.show({
                 type: 'success',
-                text1: 'Requisição criada',
+                text1: 'Sucesso!',
+                text2: 'Solicitação criada com sucesso',
                 position: 'top',
                 autoHide: true,
                 visibilityTime: 4000
@@ -31,8 +32,8 @@ export default function NewRequest(){
         }catch(e){
             Toast.show({
                 type: 'error',
-                text1: "Erro na criação de requisição",
-                text2: 'Não foi possível criar uma nova requisição',
+                text1: "Erro na criação de solicitação",
+                text2: 'Não foi possível criar uma nova solicitação',
                 position: 'top',
                 autoHide: true,
                 visibilityTime: 4000

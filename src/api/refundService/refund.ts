@@ -42,7 +42,7 @@ export const createExpense = async (data: CreateExpenseRequest) => {
 
     console.log("Enviando reembolso com imagem:", data.image);
 
-    const response = await api.post('/expenses', formData);
+    const response = await api.post('/expenses', formData, {headers: {"Content-Type": 'multipart/form-data'}});
     return response.data;
   } catch (error: any) {
     console.error("Erro ao criar reembolso:", error.response?.data || error);

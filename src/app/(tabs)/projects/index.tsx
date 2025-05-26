@@ -3,7 +3,6 @@ import { Heading } from "@/components/ui/heading"
 import { SearchIcon } from "@/components/ui/icon"
 import { Input, InputSlot, InputIcon, InputField } from "@/components/ui/input"
 import { getAllProjects } from "@/src/api/projectService/project"
-import AddButton from "@/src/components/AddButton"
 import CardProject from "@/src/components/project/cardProject"
 import Project from "@/src/types/project"
 import { useRouter, useFocusEffect } from "expo-router"
@@ -11,7 +10,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { FlatList, RefreshControl, Text } from "react-native"
 
 export default function Projects() {
-    const [projects, setProjects] = useState<Project[]>([])
+    const [projects, setProjects] = useState<Project[]>([]);
     const [searchText, setSearchText] = useState("")
     const [refreshing, setRefreshing] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -20,8 +19,8 @@ export default function Projects() {
     const getProjects = async () => {
         try {
             setLoading(true)
-            const response = await getAllProjects(searchText)
-            setProjects(response ?? [])
+            const response = await getAllProjects(1,50,searchText)
+            setProjects(response.data ?? [])
         } catch (error) {
             console.error("Erro ao listar projetos")
         } finally {
@@ -78,7 +77,6 @@ export default function Projects() {
                     }
                 />
             )}
-            <AddButton href='/projects/new'/>
         </Box>
     )
 }

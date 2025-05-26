@@ -1,8 +1,19 @@
-export interface user{
-    requests: Request[];
-    role: string;
+export interface user {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  __v: number;
+  projects: string[];
+  requests: {
     _id: string;
-    name: string;
-    email: string;
-    _v: number
+    title: string;
+    status: string;
+    project: string;
+    expenses: string[];
+    user: string;
+    code: string;
+    __v: number;
+    isOverLimit?: boolean;
+  }[];
 }

@@ -2,9 +2,11 @@ import api from "@/src/lib/api";
 import Project from "@/src/types/project";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getAllProjects = async (search?: string): Promise<Project[]> => {
+export const getAllProjects = async (page: number, limit: number, search?: string): Promise<Project[]> => {
     try {
-        const response = await api.get("/projects", {params: { search } })
+        const response = await api.get("/projects", {
+            params: { search, page, limit },
+        })
         return response.data ?? []
     } catch (error) {
         return []

@@ -87,7 +87,7 @@ const ProjectDetails = () => {
                   >
                     <Box className="gap-1 flex-1">
                       <Text className="text-lg">{item.title}</Text>
-                      <Text className="text-gray-600 text-sm">#{item.code}</Text>
+                      <Text className="text-gray-600 text-sm">#{item.code.toLocaleUpperCase()}</Text>
                     </Box>
                     <StatusBadge status={item.status} />
                   </TouchableOpacity>
@@ -131,9 +131,6 @@ const ProjectDetails = () => {
 
       <Divider className="bg-gray-700 my-2" orientation="horizontal" />
 
-      <Box>
-        <DeleteProject id={project_id} onDelete={ () => router.push({ pathname: "/projects"})}/>
-      </Box>
     </ScrollView>
   );
 };
