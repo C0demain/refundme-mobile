@@ -44,18 +44,18 @@ export default function RequestPage() {
   );
 
   const changeStatus = async () => {
-    try{
-      if(request){
-        await updateRequestById(request?._id, {status: 'Pendente'})
+    try {
+      if (request) {
+        await updateRequestById(request?._id, { status: 'Pendente' })
         Toast.show({
-        type: "success",
-        text1: "Solicitação enviada para análise",
-        position: "top",
-      })
+          type: "success",
+          text1: "Solicitação enviada para análise",
+          position: "top",
+        })
 
-      navigate('/requests')
+        navigate('/requests')
       }
-    }catch(e){
+    } catch (e) {
       console.error(e)
       Toast.show({
         type: "error",
@@ -148,26 +148,26 @@ export default function RequestPage() {
         renderItem={({ item }) => <ExpenseItem expense={item} />}
       />
 
-      {/* Botões de ação */}
-      <Box className="px-4 pt-4 pb-2 space-y-3 bg-white border-t border-gray-200">
-        {request?.status === 'Rascunho' && 
+      {request?.status === 'Rascunho' &&
         <>
-        <Link
-          href={{ pathname: "/refund/[request_id]", params: { request_id } }}
-          asChild
-          >
-          <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg">
-            <Text className="text-white text-base font-semibold">Cadastrar Despesa</Text>
-          </Button>
-        </Link>
+          {/* Botões de ação */}
+          <Box className="px-4 pt-4 pb-2 space-y-3 bg-white border-t border-gray-200">
 
-          <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg" onPress={changeStatus}>
-            <Text className="text-white text-base font-semibold">Enviar para análise</Text>
-          </Button>
+            <Link
+              href={{ pathname: "/refund/[request_id]", params: { request_id } }}
+              asChild
+            >
+              <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg">
+                <Text className="text-white text-base font-semibold">Cadastrar Despesa</Text>
+              </Button>
+            </Link>
+
+            <Button className="w-full bg-purple-600 rounded-lg shadow-md mb-2" size="lg" onPress={changeStatus}>
+              <Text className="text-white text-base font-semibold">Enviar para análise</Text>
+            </Button>
+          </Box>
         </>
-        }
-        
-      </Box>
+      }
     </Box>
   );
 }
